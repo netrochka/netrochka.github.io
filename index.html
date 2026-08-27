@@ -5,275 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>netrochka | Premium Profile</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        /* Динамический анимированный фон */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
         body {
             background: linear-gradient(135deg, #07030d 0%, #120524 50%, #07030d 100%);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
-            position: relative;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; overflow-x: hidden; position: relative;
         }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Декоративные светящиеся сферы на фоне */
-        .bg-glow-1, .bg-glow-2 {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(212,61,251,0.15) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%;
-            z-index: 0;
-            pointer-events: none;
-        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .bg-glow-1, .bg-glow-2 { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(212,61,251,0.15) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: 0; pointer-events: none; }
         .bg-glow-1 { top: 10%; left: 10%; animation: floatGlow 8s ease-in-out infinite; }
         .bg-glow-2 { bottom: 10%; right: 10%; animation: floatGlow 12s ease-in-out infinite alternate; }
-
-        @keyframes floatGlow {
-            0% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-30px) scale(1.1); }
-            100% { transform: translateY(0px) scale(1); }
-        }
-
-        /* Эффект стеклянной карточки (Glassmorphism) */
+        @keyframes floatGlow { 0% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-30px) scale(1.1); } 100% { transform: translateY(0px) scale(1); } }
         .card {
-            position: relative;
-            z-index: 1;
-            background: rgba(18, 9, 31, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 2px solid rgba(212, 61, 251, 0.4);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 500px;
-            padding: 45px 35px;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(212, 61, 251, 0.15), 
-                        inset 0 0 20px rgba(212, 61, 251, 0.05);
-            animation: neonPulse 4s ease-in-out infinite alternate;
+            position: relative; z-index: 1; background: rgba(18, 9, 31, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 2px solid rgba(212, 61, 251, 0.4); border-radius: 24px; width: 100%; max-width: 500px; padding: 45px 35px; text-align: center; box-shadow: 0 0 30px rgba(212, 61, 251, 0.15); animation: neonPulse 4s ease-in-out infinite alternate;
         }
-
-        @keyframes neonPulse {
-            0% { border-color: rgba(212, 61, 251, 0.4); box-shadow: 0 0 25px rgba(212, 61, 251, 0.15); }
-            100% { border-color: rgba(212, 61, 251, 0.8); box-shadow: 0 0 40px rgba(212, 61, 251, 0.3); }
-        }
-
-        /* Аватарка с эффектом мерцания */
-        .avatar-container {
-            position: relative;
-            margin-bottom: 25px;
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid #d43dfb;
-            object-fit: cover;
-            box-shadow: 0 0 20px rgba(212, 61, 251, 0.6);
-            display: block;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .avatar-container:hover .avatar {
-            transform: scale(1.08) rotate(3deg);
-        }
-
-        /* Секретное всплывающее окошко над аватаркой */
+        @keyframes neonPulse { 0% { border-color: rgba(212, 61, 251, 0.4); box-shadow: 0 0 25px rgba(212, 61, 251, 0.15); } 100% { border-color: rgba(212, 61, 251, 0.8); box-shadow: 0 0 40px rgba(212, 61, 251, 0.3); } }
+        .avatar-container { position: relative; margin-bottom: 25px; display: inline-block; cursor: pointer; }
+        .avatar { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #d43dfb; object-fit: cover; box-shadow: 0 0 20px rgba(212, 61, 251, 0.6); display: block; transition: transform 0.5s ease; }
+        .avatar-container:hover .avatar { transform: scale(1.08) rotate(3deg); }
         .secret-badge {
-            position: absolute;
-            top: -45px;
-            left: 50%;
-            transform: translateX(-50%) scale(0.8);
-            background: #ff9900; /* Классический оранжевый цвет порнхаба */
-            color: #000000;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            box-shadow: 0 0 15px rgba(255, 153, 0, 0.5);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
+            position: absolute; top: -45px; left: 50%; transform: translateX(-50%) scale(0.8); background: #ff9900; color: #000000; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 900; letter-spacing: 0.5px; white-space: nowrap; box-shadow: 0 0 15px rgba(255, 153, 0, 0.5); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10;
         }
-
-        /* Хвостик для окошка */
-        .secret-badge::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 5px 5px 0;
-            border-style: solid;
-            border-color: #ff9900 transparent;
-            display: block;
-            width: 0;
-        }
-
-        .secret-badge.show {
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-            pointer-events: auto;
-        }
-
-        .secret-link {
-            color: #000000;
-            text-decoration: none;
-        }
-        .secret-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Никнейм с неоновым текстом */
-        .username {
-            color: #ffffff;
-            font-size: 32px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            margin-bottom: 35px;
-            text-shadow: 0 0 10px rgba(212, 61, 251, 0.6), 0 0 20px rgba(212, 61, 251, 0.2);
-        }
-
-        /* Контейнер списков */
-        .links-wrapper {
-            position: relative;
-            width: 100%;
-            padding-left: 40px;
-            text-align: left;
-        }
-
-        /* Живая неоновая дуга */
+        .secret-badge::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-width: 5px 5px 0; border-style: solid; border-color: #ff9900 transparent; display: block; width: 0; }
+        .secret-badge.show { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
+        .secret-link { color: #000000; text-decoration: none; }
+        .secret-link:hover { text-decoration: underline; }
+        .username { color: #ffffff; font-size: 32px; font-weight: 900; letter-spacing: 1px; margin-bottom: 35px; text-shadow: 0 0 10px rgba(212, 61, 251, 0.6); }
+        .links-wrapper { position: relative; width: 100%; padding-left: 40px; text-align: left; margin-bottom: 30px; }
         .custom-curve {
-            position: absolute;
-            left: 5px;
-            top: 10px;
-            bottom: 12px;
-            width: 24px;
-            border-left: 2px dashed rgba(212, 61, 251, 0.8);
-            border-top: 2px dashed rgba(212, 61, 251, 0.8);
-            border-bottom: 2px dashed rgba(212, 61, 251, 0.8);
-            border-top-left-radius: 14px;
-            border-bottom-left-radius: 14px;
-            filter: drop-shadow(0 0 5px rgba(212,61,251,0.5));
+            position: absolute; left: 5px; top: 10px; bottom: 12px; width: 24px; border-left: 2px dashed rgba(212, 61, 251, 0.8); border-top: 2px dashed rgba(212, 61, 251, 0.8); border-bottom: 2px dashed rgba(212, 61, 251, 0.8); border-top-left-radius: 14px; border-bottom-left-radius: 14px; filter: drop-shadow(0 0 5px rgba(212,61,251,0.5));
         }
-
-        .custom-curve::after {
-            content: '✧';
-            position: absolute;
-            bottom: -10px;
-            left: -7px;
-            color: #f38eff;
-            font-size: 16px;
-            text-shadow: 0 0 10px #d43dfb;
-            background-color: #12091f;
-            padding: 0 2px;
-            animation: starBlink 2s infinite alternate;
-        }
-
-        @keyframes starBlink {
-            0% { opacity: 0.5; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1.1); }
-        }
-
-        /* Заголовок Contacts */
-        .contacts-header {
-            color: #ffffff;
-            font-size: 19px;
-            font-weight: 800;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            line-height: 1;
-            text-shadow: 0 0 8px rgba(255,255,255,0.3);
-        }
-
-        .links-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        /* Премиум-вкладки */
+        .custom-curve::after { content: '✧'; position: absolute; bottom: -10px; left: -7px; color: #f38eff; font-size: 16px; text-shadow: 0 0 10px #d43dfb; background-color: #12091f; padding: 0 2px; }
+        .contacts-header { color: #ffffff; font-size: 19px; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 6px; line-height: 1; }
+        .links-list { display: flex; flex-direction: column; gap: 15px; }
         .link-item {
-            display: flex;
-            align-items: center;
-            color: #e0d5ed;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 6px 12px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 61, 251, 0.05);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            word-break: break-all;
-            line-height: 1.4;
+            display: flex; align-items: center; color: #e0d5ed; text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 12px; border-radius: 8px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(212, 61, 251, 0.05); transition: all 0.25s ease; word-break: break-all;
         }
-
-        .link-name {
-            font-weight: 700;
-            color: #ffffff;
-            margin-right: 5px;
-            transition: color 0.2s;
+        .link-name { font-weight: 700; color: #ffffff; margin-right: 5px; }
+        .link-icon { margin-right: 12px; font-size: 18px; flex-shrink: 0; }
+        .link-item:hover { color: #ffffff; background: rgba(212, 61, 251, 0.12); border-color: rgba(212, 61, 251, 0.5); transform: translateX(8px); box-shadow: 0 0 15px rgba(212, 61, 251, 0.2); }
+        .link-item:hover .link-name { color: #f38eff; }
+        
+        /* Стили плеера под спотифай */
+        .player-container {
+            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 61, 251, 0.2); border-radius: 16px; padding: 15px 20px; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; box-shadow: inset 0 0 10px rgba(212, 61, 251, 0.05);
         }
-
-        .link-icon {
-            margin-right: 12px;
-            font-size: 18px;
-            flex-shrink: 0;
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-
-        /* Мощный интерактивный эффект при наведении */
-        .link-item:hover {
-            color: #ffffff;
-            background: rgba(212, 61, 251, 0.12);
-            border-color: rgba(212, 61, 251, 0.5);
-            transform: translateX(8px);
-            box-shadow: 0 0 15px rgba(212, 61, 251, 0.2), inset 0 0 8px rgba(212, 61, 251, 0.1);
-        }
-
-        .link-item:hover .link-name {
-            color: #f38eff;
-        }
-
-        .link-item:hover .link-icon {
-            transform: scale(1.2) rotate(-8deg);
-        }
+        .track-info { display: flex; justify-content: space-between; align-items: center; text-align: left; }
+        .track-text { overflow: hidden; width: 75%; }
+        .track-title { color: #ffffff; font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 8px rgba(212, 61, 251, 0.3); }
+        .track-author { color: #a594b8; font-size: 12px; }
+        .player-controls { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 5px; }
+        .control-btn { background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; }
+        .control-btn:hover { transform: scale(1.15); color: #f38eff; }
+        .btn-play { background: #d43dfb; color: #000000; border-radius: 50%; width: 38px; height: 38px; font-size: 16px; box-shadow: 0 0 10px #d43dfb; }
+        .btn-play:hover { background: #f38eff; color: #000000; box-shadow: 0 0 15px #f38eff; transform: scale(1.08); }
+        .btn-active { color: #f38eff !important; text-shadow: 0 0 10px #d43dfb; }
     </style>
 </head>
 <body>
-
-    <!-- Задний неоновый свет -->
     <div class="bg-glow-1"></div>
     <div class="bg-glow-2"></div>
 
     <div class="card">
-        <!-- Аватарка с секретным всплывающим окном -->
         <div class="avatar-container" onclick="showSecretBadge()">
             <div id="secretBadge" class="secret-badge">
                 <a href="https://rt.pornhub.com/users/netrochka" target="_blank" class="secret-link">🔥 SECRETS HERE 🔥</a>
@@ -281,64 +75,129 @@
             <img src="avatar.png" onerror="this.src='https://i.imgur.com/8Q5N8wA.png'" class="avatar" alt="netrochka">
         </div>
 
-        <!-- Никнейм -->
         <div class="username">netrochka</div>
 
-        <!-- Блок контактов со сложной дугой -->
         <div class="links-wrapper">
             <div class="custom-curve"></div>
-            
-            <div class="contacts-header">
-                💝 Contacts 💝
-            </div>
-
+            <div class="contacts-header">💝 Contacts 💝</div>
             <div class="links-list">
                 <a href="https://steamcommunity.com/id/netrochka/" target="_blank" class="link-item">
-                    <span class="link-icon">💍</span><span class="link-name">Steam:</span> steamcommunity.com/id/netrochka/
+                    <span class="link-icon">💍</span><span class="link-name">Steam:</span> ://steamcommunity.com
                 </a>
                 <a href="https://t.me/netrochka" target="_blank" class="link-item">
                     <span class="link-icon">⭐</span><span class="link-name">Telegram:</span> t.me/netrochka
                 </a>
                 <a href="https://tiktok.com/@netrochka" target="_blank" class="link-item">
-                    <span class="link-icon">💝</span><span class="link-name">TikTok:</span> tiktok.com/@netrochka
+                    <span class="link-icon">💝</span><span class="link-name">TikTok:</span> ://tiktok.com
                 </a>
                 <a href="https://roblox.com/users/8427859265/profile" target="_blank" class="link-item">
-                    <span class="link-icon">🩸</span><span class="link-name">Roblox:</span> roblox.com/users/8427859265/...
+                    <span class="link-icon">🩸</span><span class="link-name">Roblox:</span> ://roblox.com...
                 </a>
                 <a href="https://youtube.com/@netrochka" target="_blank" class="link-item">
-                    <span class="link-icon">📺</span><span class="link-name">YouTube:</span> youtube.com/@netrochka
+                    <span class="link-icon">📺</span><span class="link-name">YouTube:</span> ://youtube.com
                 </a>
                 <a href="https://x.com/netrochka" target="_blank" class="link-item">
-                    <span class="link-icon">🔮</span><span class="link-name">X (Twitter):</span> x.com/netrochka
+                    <span class="link-icon">🔮</span><span class="link-name">X (Twitter):</span> ://x.com
                 </a>
                 <a href="https://twitch.tv/netrochka" target="_blank" class="link-item">
                     <span class="link-icon">👾</span><span class="link-name">Twitch:</span> twitch.tv/netrochka
                 </a>
                 <a href="https://reddit.com/u/netrochka" target="_blank" class="link-item">
-                    <span class="link-icon">👹</span><span class="link-name">Reddit:</span> reddit.com/u/netrochka
+                    <span class="link-icon">👹</span><span class="link-name">Reddit:</span> ://reddit.com
                 </a>
             </div>
         </div>
-    </div>
-
-    <!-- Скрипт для скрытой пасхалки -->
     <script>
-        let timer;
+        // Список твоих треков, закинутых в корень репозитория GitHub
+        const tracks = [
+            { name: "All Star", src: "track1.mp3" },
+            { name: "I'm A Believer", src: "track2.mp3" },
+            { name: "Accidentally In Love", src: "track3.mp3" },
+            { name: "I'm On My Way", src: "track4.mp3" }
+        ];
+
+        let currentTrackIdx = 0;
+        let isPlaying = false;
+        let isRepeating = false;
+        const audio = new Audio(tracks[currentTrackIdx].src);
+
+        function updateTrackUI() {
+            document.getElementById('trackTitle').innerText = tracks[currentTrackIdx].name;
+        }
+
+        function togglePlay() {
+            const playBtn = document.getElementById('playBtn');
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerText = "▶";
+            } else {
+                audio.play().catch(e => console.log("Нужен клик по странице для запуска аудио"));
+                playBtn.innerText = "⏸";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function nextTrack() {
+            audio.pause();
+            currentTrackIdx = (currentTrackIdx + 1) % tracks.length;
+            audio.src = tracks[currentTrackIdx].src;
+            updateTrackUI();
+            if (isPlaying) {
+                audio.play();
+            } else {
+                togglePlay();
+            }
+        }
+
+        // Автопереключение по окончании трека
+        audio.addEventListener('ended', () => {
+            if (isRepeating) {
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                nextTrack();
+            }
+        });
+
+        function toggleRepeat() {
+            isRepeating = !isRepeating;
+            document.getElementById('repeatBtn').classList.toggle('btn-active', isRepeating);
+        }
+
+        function toggleLike() {
+            const likeBtn = document.getElementById('likeBtn');
+            likeBtn.classList.toggle('btn-active');
+            if (likeBtn.classList.contains('btn-active')) {
+                likeBtn.innerText = "💖";
+            } else {
+                likeBtn.innerText = "🤍";
+            }
+        }
+
+        let badgeTimer;
         function showSecretBadge() {
             const badge = document.getElementById('secretBadge');
-            
-            // Показываем плашечку
             badge.classList.add('show');
-            
-            // Сбрасываем старый таймер, если кликнули много раз подряд
-            clearTimeout(timer);
-            
-            // Прячем ровно через 3 секунды
-            timer = setTimeout(() => {
-                badge.classList.remove('show');
-            }, 3000);
+            clearTimeout(badgeTimer);
+            badgeTimer = setTimeout(() => { badge.classList.remove('show'); }, 3000);
         }
     </script>
-
 </body>
 </html>
+
+        <!-- Интерфейс музыкального плеера -->
+        <div class="player-container">
+            <div class="track-info">
+                <div class="track-text">
+                    <div id="trackTitle" class="track-title">All Star</div>
+                    <div class="track-author">Smash Mouth (Shrek OST)</div>
+                </div>
+                <button id="likeBtn" class="control-btn" onclick="toggleLike()">🤍</button>
+            </div>
+            <div class="player-controls">
+                <button id="repeatBtn" class="control-btn" onclick="toggleRepeat()">🔁</button>
+                <button id="playBtn" class="control-btn btn-play" onclick="togglePlay()">▶</button>
+                <button class="control-btn" onclick="nextTrack()">⏭️</button>
+            </div>
+        </div>
+    </div>
