@@ -79,6 +79,7 @@
             position: relative;
             margin-bottom: 25px;
             display: inline-block;
+            cursor: pointer;
         }
 
         .avatar {
@@ -94,6 +95,55 @@
 
         .avatar-container:hover .avatar {
             transform: scale(1.08) rotate(3deg);
+        }
+
+        /* Секретное всплывающее окошко над аватаркой */
+        .secret-badge {
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: #ff9900; /* Классический оранжевый цвет порнхаба */
+            color: #000000;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
+
+        /* Хвостик для окошка */
+        .secret-badge::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px 5px 0;
+            border-style: solid;
+            border-color: #ff9900 transparent;
+            display: block;
+            width: 0;
+        }
+
+        .secret-badge.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            pointer-events: auto;
+        }
+
+        .secret-link {
+            color: #000000;
+            text-decoration: none;
+        }
+        .secret-link:hover {
+            text-decoration: underline;
         }
 
         /* Никнейм с неоновым текстом */
@@ -223,9 +273,12 @@
     <div class="bg-glow-2"></div>
 
     <div class="card">
-        <!-- Аватарка (Ищет avatar.png в твоем корне Гитхаба) -->
-        <div class="avatar-container">
-            <img src="avatar.png" onerror="this.src='https://imgur.com'" class="avatar" alt="netrochka">
+        <!-- Аватарка с секретным всплывающим окном -->
+        <div class="avatar-container" onclick="showSecretBadge()">
+            <div id="secretBadge" class="secret-badge">
+                <a href="https://rt.pornhub.com/users/netrochka" target="_blank" class="secret-link">🔥 SECRETS HERE 🔥</a>
+            </div>
+            <img src="avatar.png" onerror="this.src='https://i.imgur.com/8Q5N8wA.png'" class="avatar" alt="netrochka">
         </div>
 
         <!-- Никнейм -->
@@ -241,32 +294,51 @@
 
             <div class="links-list">
                 <a href="https://steamcommunity.com/id/netrochka/" target="_blank" class="link-item">
-                    <span class="link-icon">💍</span><span class="link-name">Steam:</span> ://steamcommunity.com
+                    <span class="link-icon">💍</span><span class="link-name">Steam:</span> steamcommunity.com/id/netrochka/
                 </a>
                 <a href="https://t.me/netrochka" target="_blank" class="link-item">
                     <span class="link-icon">⭐</span><span class="link-name">Telegram:</span> t.me/netrochka
                 </a>
                 <a href="https://tiktok.com/@netrochka" target="_blank" class="link-item">
-                    <span class="link-icon">💝</span><span class="link-name">TikTok:</span> ://tiktok.com
+                    <span class="link-icon">💝</span><span class="link-name">TikTok:</span> tiktok.com/@netrochka
                 </a>
                 <a href="https://roblox.com/users/8427859265/profile" target="_blank" class="link-item">
-                    <span class="link-icon">🩸</span><span class="link-name">Roblox:</span> ://roblox.com...
+                    <span class="link-icon">🩸</span><span class="link-name">Roblox:</span> roblox.com/users/8427859265/...
                 </a>
-                <a href="https://www.youtube.com/@netrochka" target="_blank" class="link-item">
-                    <span class="link-icon">📺</span><span class="link-name">YouTube:</span> ://youtube.com
+                <a href="https://youtube.com/@netrochka" target="_blank" class="link-item">
+                    <span class="link-icon">📺</span><span class="link-name">YouTube:</span> youtube.com/@netrochka
                 </a>
                 <a href="https://x.com/netrochka" target="_blank" class="link-item">
-                    <span class="link-icon">🔮</span><span class="link-name">X (Twitter):</span> ://x.com
+                    <span class="link-icon">🔮</span><span class="link-name">X (Twitter):</span> x.com/netrochka
                 </a>
-                <a href="https://www.twitch.tv/netrochka" target="_blank" class="link-item">
+                <a href="https://twitch.tv/netrochka" target="_blank" class="link-item">
                     <span class="link-icon">👾</span><span class="link-name">Twitch:</span> twitch.tv/netrochka
                 </a>
-                <a href="https://www.reddit.com/u/netrochka" target="_blank" class="link-item">
-                    <span class="link-icon">👹</span><span class="link-name">Reddit:</span> ://reddit.com
+                <a href="https://reddit.com/u/netrochka" target="_blank" class="link-item">
+                    <span class="link-icon">👹</span><span class="link-name">Reddit:</span> reddit.com/u/netrochka
                 </a>
             </div>
         </div>
     </div>
+
+    <!-- Скрипт для скрытой пасхалки -->
+    <script>
+        let timer;
+        function showSecretBadge() {
+            const badge = document.getElementById('secretBadge');
+            
+            // Показываем плашечку
+            badge.classList.add('show');
+            
+            // Сбрасываем старый таймер, если кликнули много раз подряд
+            clearTimeout(timer);
+            
+            // Прячем ровно через 3 секунды
+            timer = setTimeout(() => {
+                badge.classList.remove('show');
+            }, 3000);
+        }
+    </script>
 
 </body>
 </html>
