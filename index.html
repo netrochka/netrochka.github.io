@@ -161,20 +161,18 @@
         let isPlaying = false;
         let isRepeating = false;
         let audio = new Audio(tracks[currentTrackIdx].src);
-
-        function setupAudioListeners() {
-            audio.addEventListener('timeupdate', updateProgressBar);
-            audio.addEventListener('loadedmetadata', updateDurationText);
-            audio.onended = function() {
+        // Слушатели событий вешаем ОДИН раз напрямую на объект audio
+        audio.addEventListener('timeupdate', updateProgressBar);
+        audio.addEventListener('loadedmetadata', updateDurationText);
+        
+        audio.onended = function() {
             if (isRepeating) {
                 audio.currentTime = 0;
                 audio.play().catch(e => console.log(e));
             } else {
-                let idx = (currentTrackIdx + 1) % tracks.length;
-                changeTrack(idx);
+                nextTrack();
             }
-        }
-        setupAudioListeners();
+        };
 
         function updateTrackUI() {
             document.getElementById('trackTitle').innerText = tracks[currentTrackIdx].name;
@@ -189,7 +187,7 @@
                 audio.pause();
                 playBtn.innerText = "▶";
             } else {
-                audio.play().catch(e => console.log("Кликни на страницу сначала"));
+                audio.play().catch(e => console.log("Нужен клик"));
                 playBtn.innerText = "⏸";
             }
             isPlaying = !isPlaying;
@@ -200,7 +198,6 @@
             audio.currentTime = 0;
             currentTrackIdx = index;
             audio.src = tracks[currentTrackIdx].src;
-            setupAudioListeners();
             updateTrackUI();
             if (isPlaying) {
                 audio.play().catch(e => console.log("Ошибка автозапуска"));
