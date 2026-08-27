@@ -165,14 +165,14 @@
         function setupAudioListeners() {
             audio.addEventListener('timeupdate', updateProgressBar);
             audio.addEventListener('loadedmetadata', updateDurationText);
-            audio.addEventListener('ended', () => {
-                if (isRepeating) {
-                    audio.currentTime = 0;
-                    audio.play();
-                } else {
-                    nextTrack();
-                }
-            });
+            audio.onended = function() {
+            if (isRepeating) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log(e));
+            } else {
+                let idx = (currentTrackIdx + 1) % tracks.length;
+                changeTrack(idx);
+            }
         }
         setupAudioListeners();
 
