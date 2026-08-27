@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>netrochka | Ссылки</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0b0612;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Главная карточка */
+        .card {
+            background-color: #12091f;
+            border: 2px solid #d43dfb;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(212, 61, 251, 0.2), inset 0 0 15px rgba(212, 61, 251, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Блок аватарки */
+        .avatar-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid #d43dfb;
+            object-fit: cover;
+            box-shadow: 0 0 15px rgba(212, 61, 251, 0.6);
+            display: block;
+        }
+
+        /* Никнейм */
+        .username {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 35px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Контейнер для интерфейса со списком ссылок */
+        .links-wrapper {
+            position: relative;
+            width: 100%;
+            padding-left: 35px; /* Отступ под дугу */
+            text-align: left;
+        }
+
+        /* Твоя кастомная широкая дуга */
+        .custom-curve {
+            position: absolute;
+            left: 5px;
+            top: 10px; /* Выровнено четко под верх заголовка Contacts */
+            bottom: 12px; /* Заканчивается ровно на последней кнопке */
+            width: 20px; /* Сделана шире */
+            border-left: 2px dashed rgba(212, 61, 251, 0.7);
+            border-top: 2px dashed rgba(212, 61, 251, 0.7);
+            border-bottom: 2px dashed rgba(212, 61, 251, 0.7);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        /* Светящийся ромбик-звездочка внизу дуги */
+        .custom-curve::after {
+            content: '✧';
+            position: absolute;
+            bottom: -10px;
+            left: -7px;
+            color: #d43dfb;
+            font-size: 14px;
+            text-shadow: 0 0 8px #d43dfb;
+            background-color: #12091f;
+            padding: 0 2px;
+        }
+
+        /* Заголовок Contacts */
+        .contacts-header {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1;
+        }
+
+        /* Список вкладок */
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Сама вкладка/ссылка */
+        .link-item {
+            display: flex;
+            align-items: center;
+            color: #e0d5ed;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 4px 0;
+            transition: all 0.2s ease-in-out;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        /* Название соцсети жирным */
+        .link-name {
+            font-weight: 700;
+            color: #ffffff;
+            margin-right: 4px;
+        }
+
+        /* Эмодзи/Иконка перед текстом */
+        .link-icon {
+            margin-right: 10px;
+            font-size: 16px;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+
+        /* Эффект при наведении на вкладку */
+        .link-item:hover {
+            color: #f38eff;
+            transform: translateX(5px); /* Сдвиг вправо */
+            text-shadow: 0 0 8px rgba(212, 61, 251, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Аватарка (Замени avatar.png на свое фото на Гитхабе) -->
+        <div class="avatar-container">
+            <img src="avatar.png" onerror="this.src='https://imgur.com'" class="avatar" alt="netrochka">
+        </div>
+
+        <!-- Никнейм -->
+        <div class="username">netrochka</div>
+
+        <!-- Блок контактов с дугой -->
+        <div class="links-wrapper">
+            <div class="custom-curve"></div>
+            
+            <div class="contacts-header">
+                💝 Contacts 💝
+            </div>
+
+            <div class="links-list">
+                <a href="https://steamcommunity.com" target="_blank" class="link-item">
+                    <span class="link-icon">💍</span><span class="link-name">Steam:</span> ://steamcommunity.com
+                </a>
+                <a href="https://t.me" target="_blank" class="link-item">
+                    <span class="link-icon">⭐</span><span class="link-name">Telegram:</span> t.me/netrochka
+                </a>
+                <a href="https://tiktok.com" target="_blank" class="link-item">
+                    <span class="link-icon">💝</span><span class="link-name">TikTok:</span> ://tiktok.com
+                </a>
+                <a href="https://roblox.com" target="_blank" class="link-item">
+                    <span class="link-icon">🩸</span><span class="link-name">Roblox:</span> ://roblox.com...
+                </a>
+                <a href="https://youtube.com" target="_blank" class="link-item">
+                    <span class="link-icon">📺</span><span class="link-name">YouTube:</span> ://youtube.com
+                </a>
+                <a href="https://x.com" target="_blank" class="link-item">
+                    <span class="link-icon">🔮</span><span class="link-name">X (Twitter):</span> ://x.com
+                </a>
+                <a href="https://twitch.tv" target="_blank" class="link-item">
+                    <span class="link-icon">👾</span><span class="link-name">Twitch:</span> twitch.tv/netrochka
+                </a>
+                <a href="https://reddit.com" target="_blank" class="link-item">
+                    <span class="link-icon">👹</span><span class="link-name">Reddit:</span> ://reddit.com
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
