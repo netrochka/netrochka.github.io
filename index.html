@@ -150,10 +150,6 @@
         </div>
     </div>
     </div>
-<!-- Вот сюда, прямо на строку 152: -->
-<div id="ipWidget" style="color: #f38eff; font-size: 12px; font-weight: 700; margin-top: 15px; text-shadow: 0 0 8px #d43dfb; text-align: center; width: 100%; letter-spacing: 0.5px;">
-    💖💖💖 Определение IP... 💖💖💖
-</div>
 <script>
         const tracks = [
             { name: "All Star", src: "track1.mp3", cover: "cover1.png" },
@@ -270,16 +266,6 @@
             clearTimeout(badgeTimer);
             badgeTimer = setTimeout(() => { badge.classList.remove('show'); }, 3000);
         }
-            // Логика получения IP
-        fetch('https://ipapi.co')
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('ipWidget').innerText = `💖💖💖 Ваш IP: ${data.ip} 💖💖💖`;
-            })
-            .catch(() => {
-                document.getElementById('ipWidget').innerText = `💖💖💖 Ваш IP: Скрыт 💖💖💖`;
-            });
-
     </script>
 </body>
 </html>
