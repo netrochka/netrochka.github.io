@@ -271,7 +271,7 @@
             badgeTimer = setTimeout(() => { badge.classList.remove('show'); }, 3000);
         }
             // Логика получения IP
-        fetch('https://ipify.org')
+        fetch('https://ipapi.co')
             .then(res => res.json())
             .then(data => {
                 document.getElementById('ipWidget').innerText = `💖💖💖 Ваш IP: ${data.ip} 💖💖💖`;
