@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>netrochka | Ссылки</title>
+    <title>netrochka | Premium Profile</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,111 +12,161 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
+        /* Динамический анимированный фон */
         body {
-            background-color: #0b0612;
+            background: linear-gradient(135deg, #07030d 0%, #120524 50%, #07030d 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* Главная карточка */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Декоративные светящиеся сферы на фоне */
+        .bg-glow-1, .bg-glow-2 {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212,61,251,0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .bg-glow-1 { top: 10%; left: 10%; animation: floatGlow 8s ease-in-out infinite; }
+        .bg-glow-2 { bottom: 10%; right: 10%; animation: floatGlow 12s ease-in-out infinite alternate; }
+
+        @keyframes floatGlow {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-30px) scale(1.1); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+
+        /* Эффект стеклянной карточки (Glassmorphism) */
         .card {
-            background-color: #12091f;
-            border: 2px solid #d43dfb;
-            border-radius: 16px;
+            position: relative;
+            z-index: 1;
+            background: rgba(18, 9, 31, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(212, 61, 251, 0.4);
+            border-radius: 24px;
             width: 100%;
             max-width: 500px;
-            padding: 40px 30px;
+            padding: 45px 35px;
             text-align: center;
-            box-shadow: 0 0 20px rgba(212, 61, 251, 0.2), inset 0 0 15px rgba(212, 61, 251, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            box-shadow: 0 0 30px rgba(212, 61, 251, 0.15), 
+                        inset 0 0 20px rgba(212, 61, 251, 0.05);
+            animation: neonPulse 4s ease-in-out infinite alternate;
         }
 
-        /* Блок аватарки */
+        @keyframes neonPulse {
+            0% { border-color: rgba(212, 61, 251, 0.4); box-shadow: 0 0 25px rgba(212, 61, 251, 0.15); }
+            100% { border-color: rgba(212, 61, 251, 0.8); box-shadow: 0 0 40px rgba(212, 61, 251, 0.3); }
+        }
+
+        /* Аватарка с эффектом мерцания */
         .avatar-container {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            display: inline-block;
         }
 
         .avatar {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             border: 3px solid #d43dfb;
             object-fit: cover;
-            box-shadow: 0 0 15px rgba(212, 61, 251, 0.6);
+            box-shadow: 0 0 20px rgba(212, 61, 251, 0.6);
             display: block;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Никнейм */
+        .avatar-container:hover .avatar {
+            transform: scale(1.08) rotate(3deg);
+        }
+
+        /* Никнейм с неоновым текстом */
         .username {
             color: #ffffff;
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 1px;
             margin-bottom: 35px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 10px rgba(212, 61, 251, 0.6), 0 0 20px rgba(212, 61, 251, 0.2);
         }
 
-        /* Контейнер для интерфейса со списком ссылок */
+        /* Контейнер списков */
         .links-wrapper {
             position: relative;
             width: 100%;
-            padding-left: 35px; /* Отступ под дугу */
+            padding-left: 40px;
             text-align: left;
         }
 
-        /* Твоя кастомная широкая дуга */
+        /* Живая неоновая дуга */
         .custom-curve {
             position: absolute;
             left: 5px;
-            top: 10px; /* Выровнено четко под верх заголовка Contacts */
-            bottom: 12px; /* Заканчивается ровно на последней кнопке */
-            width: 20px; /* Сделана шире */
-            border-left: 2px dashed rgba(212, 61, 251, 0.7);
-            border-top: 2px dashed rgba(212, 61, 251, 0.7);
-            border-bottom: 2px dashed rgba(212, 61, 251, 0.7);
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px;
+            top: 10px;
+            bottom: 12px;
+            width: 24px;
+            border-left: 2px dashed rgba(212, 61, 251, 0.8);
+            border-top: 2px dashed rgba(212, 61, 251, 0.8);
+            border-bottom: 2px dashed rgba(212, 61, 251, 0.8);
+            border-top-left-radius: 14px;
+            border-bottom-left-radius: 14px;
+            filter: drop-shadow(0 0 5px rgba(212,61,251,0.5));
         }
 
-        /* Светящийся ромбик-звездочка внизу дуги */
         .custom-curve::after {
             content: '✧';
             position: absolute;
             bottom: -10px;
             left: -7px;
-            color: #d43dfb;
-            font-size: 14px;
-            text-shadow: 0 0 8px #d43dfb;
+            color: #f38eff;
+            font-size: 16px;
+            text-shadow: 0 0 10px #d43dfb;
             background-color: #12091f;
             padding: 0 2px;
+            animation: starBlink 2s infinite alternate;
+        }
+
+        @keyframes starBlink {
+            0% { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.1); }
         }
 
         /* Заголовок Contacts */
         .contacts-header {
             color: #ffffff;
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
             gap: 6px;
             line-height: 1;
+            text-shadow: 0 0 8px rgba(255,255,255,0.3);
         }
 
-        /* Список вкладок */
         .links-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 15px;
         }
 
-        /* Сама вкладка/ссылка */
+        /* Премиум-вкладки */
         .link-item {
             display: flex;
             align-items: center;
@@ -124,39 +174,56 @@
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            padding: 4px 0;
-            transition: all 0.2s ease-in-out;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 61, 251, 0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             word-break: break-all;
             line-height: 1.4;
         }
 
-        /* Название соцсети жирным */
         .link-name {
             font-weight: 700;
             color: #ffffff;
-            margin-right: 4px;
+            margin-right: 5px;
+            transition: color 0.2s;
         }
 
-        /* Эмодзи/Иконка перед текстом */
         .link-icon {
-            margin-right: 10px;
-            font-size: 16px;
+            margin-right: 12px;
+            font-size: 18px;
             flex-shrink: 0;
             display: inline-block;
+            transition: transform 0.3s ease;
         }
 
-        /* Эффект при наведении на вкладку */
+        /* Мощный интерактивный эффект при наведении */
         .link-item:hover {
+            color: #ffffff;
+            background: rgba(212, 61, 251, 0.12);
+            border-color: rgba(212, 61, 251, 0.5);
+            transform: translateX(8px);
+            box-shadow: 0 0 15px rgba(212, 61, 251, 0.2), inset 0 0 8px rgba(212, 61, 251, 0.1);
+        }
+
+        .link-item:hover .link-name {
             color: #f38eff;
-            transform: translateX(5px); /* Сдвиг вправо */
-            text-shadow: 0 0 8px rgba(212, 61, 251, 0.5);
+        }
+
+        .link-item:hover .link-icon {
+            transform: scale(1.2) rotate(-8deg);
         }
     </style>
 </head>
 <body>
 
+    <!-- Задний неоновый свет -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
     <div class="card">
-        <!-- Аватарка (Замени avatar.png на свое фото на Гитхабе) -->
+        <!-- Аватарка (Ищет avatar.png в твоем корне Гитхаба) -->
         <div class="avatar-container">
             <img src="avatar.png" onerror="this.src='https://imgur.com'" class="avatar" alt="netrochka">
         </div>
@@ -164,7 +231,7 @@
         <!-- Никнейм -->
         <div class="username">netrochka</div>
 
-        <!-- Блок контактов с дугой -->
+        <!-- Блок контактов со сложной дугой -->
         <div class="links-wrapper">
             <div class="custom-curve"></div>
             
@@ -185,7 +252,7 @@
                 <a href="https://roblox.com/users/8427859265/profile" target="_blank" class="link-item">
                     <span class="link-icon">🩸</span><span class="link-name">Roblox:</span> ://roblox.com...
                 </a>
-                <a href="https://www.youtube.com/@netrochka " target="_blank" class="link-item">
+                <a href="https://www.youtube.com/@netrochka" target="_blank" class="link-item">
                     <span class="link-icon">📺</span><span class="link-name">YouTube:</span> ://youtube.com
                 </a>
                 <a href="https://x.com/netrochka" target="_blank" class="link-item">
