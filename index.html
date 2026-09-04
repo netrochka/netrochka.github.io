@@ -3,24 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Название вкладки изменено на обычный Profile -->
     <title>netrochka | Profile</title>
+    
     <style>
+        /* Базовые настройки страницы */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            background: #000;
+            background-color: #000;
         }
 
+        /* ОПТИМИЗИРОВАННЫЙ ФОН (ВИДЕО) */
         #bgVideo {
             position: fixed;
             top: 0;
@@ -29,420 +33,356 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
+            /* Размытие и приглушение яркости */
             filter: blur(25px) brightness(0.6);
-            transform: scale(1.1);
+            
+            /* СВЕРХ-ОПТИМИЗАЦИЯ ДЛЯ ВИДЕОКАРТЫ: */
+            /* Говорим браузеру заранее обрабатывать фильтр */
+            will-change: filter;
+            /* Включаем 3D-ускорение, чтобы убрать лаги и жор ресурсов */
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
         }
 
+        /* Скрываем текст "Welcome to my personal page" и "Premium" прозрачностью */
+        /* Дизайн не ломается, элементы физически остаются на своих местах */
+        .welcome-text, 
+        .premium-badge-text {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            user-select: none !important;
+        }
+        /* КАРТОЧКА ИНТЕРФЕЙСА (Оригинальная матовая тема Glassmorphism) */
         .profile-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 30px;
-            border-radius: 20px;
+            border-radius: 24px;
             width: 100%;
             max-width: 420px;
             text-align: center;
             color: #fff;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            /* Ускоряем рендеринг карточки на фоне видео */
+            transform: translateZ(0);
         }
 
         .avatar-container {
             position: relative;
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 15px;
-            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
         .avatar {
-            width: 100%;
-            height: 100%;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        /* ГОРИЗОНТАЛЬНАЯ ПАСХАЛКА С НЕОНОВЫМ СВЕЧЕНИЕМ */
         .secret-badge {
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.75);
-            border: 1px solid #ff69b4;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            display: none;
-            white-space: nowrap;
+            display: flex;
+            flex-direction: row; /* Строго горизонтально в одну линию */
+            justify-content: center;
+            gap: 4px;
+            margin-top: 10px;
+            padding: 6px 12px;
+            background: rgba(255, 20, 147, 0.15);
+            border: 1px solid rgba(255, 20, 147, 0.4);
+            border-radius: 20px;
             text-decoration: none;
-            animation: neonGlow 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes neonGlow {
-            from {
-                text-shadow: 0 0 4px #ff69b4, 0 0 10px #ff69b4;
-                box-shadow: 0 0 4px #ff69b4, 0 0 10px #ff69b4;
-            }
-            to {
-                text-shadow: 0 0 8px #ff1493, 0 0 15px #ff1493;
-                box-shadow: 0 0 8px #ff1493, 0 0 15px #ff1493;
-            }
-        }
-
-        .username {
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            margin-bottom: 20px;
-        }
-
-        .contacts-title {
+            color: #ff1493;
+            font-weight: bold;
             font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 12px;
+            /* Красивое неоновое свечение */
+            text-shadow: 0 0 8px rgba(255, 20, 147, 0.8), 0 0 15px rgba(255, 20, 147, 0.5);
+            box-shadow: 0 0 10px rgba(255, 20, 147, 0.3), inset 0 0 10px rgba(255, 20, 147, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .links-container {
+        .secret-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 20, 147, 0.6), inset 0 0 15px rgba(255, 20, 147, 0.4);
+        }
+
+        /* КОНТАКТЫ (Ссылки) */
+        .contacts-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-bottom: 25px;
-            max-height: 220px;
-            overflow-y: auto;
-            padding-right: 5px;
+            margin: 20px 0;
         }
 
-        .links-container::-webkit-scrollbar {
-            width: 5px;
-        }
-        .links-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-
-        .link-item {
+        .contact-item {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
-            color: #fff;
+            color: #eee;
             text-decoration: none;
             font-size: 15px;
-            transition: all 0.2s ease;
+            transition: background 0.2s, transform 0.2s;
         }
 
-        .link-item:hover {
-            background: rgba(255, 255, 255, 0.18);
-            transform: translateY(-1px);
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(4px);
         }
 
-        .link-icon {
+        .contact-icon {
             margin-right: 12px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
+            font-size: 18px;
         }
 
+        /* МУЗЫКАЛЬНЫЙ ПЛЕЕР */
         .player-container {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 20px;
         }
 
-        .track-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-align: left;
-            margin-bottom: 12px;
-        }
-
-        .track-cover {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            object-fit: cover;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .track-text {
-            flex-index: 1;
-            overflow: hidden;
-        }
-
-        .track-name {
-            font-size: 15px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .track-author {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.6);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .progress-block {
-            margin-bottom: 12px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            -webkit-appearance: none;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .progress-bar::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .progress-bar::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-
-        .time-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 5px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5px;
-        }
-
-        .control-btn {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .control-btn:hover {
-            color: #fff;
-        }
-
-        .play-btn {
-            font-size: 22px;
-            color: #fff;
-        }
-
-        .control-btn.active {
-            color: #ff1493;
-            text-shadow: 0 0 8px #ff1493;
-        }
+        /* Оставшиеся базовые стили плеера закроем в теге </style> ниже */
     </style>
 </head>
 <body>
 
+    <!-- ОПТИМИЗИРОВАННЫЙ ВИДЕО-ФОН -->
     <video autoplay muted loop playsinline id="bgVideo">
         <source src="Bgrnd.mp4" type="video/mp4">
     </video>
 
+    <!-- ОСНОВНАЯ КАРТОЧКА ПРОФИЛЯ -->
     <div class="profile-card">
-        <div class="avatar-container" onclick="toggleSecret(event)">
-            <img src="avatar.png" alt="Avatar" class="avatar" onerror="this.src='https://via.placeholder.com/110'">
-            <a href="https://pornhub.com/users/netrochka" target="_blank" class="secret-badge" id="secretBadge">💖💖💖</a>
+        
+        <!-- Аватарка и горизонтальная пасхалка -->
+        <div class="avatar-container">
+            <img src="avatar.png" alt="netrochka" class="avatar" id="avatarImg">
+            <!-- Секретная ссылка на профиль с горизонтальными сердечками -->
+            <a href="https://pornhub.com" target="_blank" class="secret-badge">
+                <span>💖💖💖</span>
+            </a>
         </div>
 
-        <div class="username">netrochka</div>
-
-        <div class="contacts-title">💝 Contacts 💝</div>
+        <!-- Имя пользователя -->
+        <h1 style="font-size: 24px; margin-bottom: 5px; font-weight: 600;">netrochka</h1>
         
-        <div class="links-container">
-            <a href="https://discord.com/users/1198058475327070323" target="_blank" class="link-item">
-                <span class="link-icon">🖤</span>
+        <!-- Полностью прозрачный элемент Premium, чтобы сохранить исходную структуру -->
+        <div class="premium-badge-text" style="font-size: 12px; margin-bottom: 15px;">Premium</div>
+
+        <h2 style="font-size: 18px; margin-bottom: 15px; color: #ff1493;">💝 Contacts 💝</h2>
+
+        <!-- СПИСОК КОНТАКТОВ (Дискорд на первом месте, Steam и Reddit удалены) -->
+        <div class="contacts-list">
+            <!-- Discord (на первом месте с черным сердечком) -->
+            <a href="https://discord.com" target="_blank" class="contact-item">
+                <span class="contact-icon">🖤</span>
                 <span>Discord: @netrochka</span>
             </a>
-            <a href="https://t.me/netrochka" target="_blank" class="link-item">
-                <span class="link-icon">⭐</span>
+            <!-- Telegram -->
+            <a href="https://t.me" target="_blank" class="contact-item">
+                <span class="contact-icon">⭐</span>
                 <span>Telegram</span>
             </a>
-            <a href="https://tiktok.com/@netrochka" target="_blank" class="link-item">
-                <span class="link-icon">💝</span>
+            <!-- TikTok -->
+            <a href="https://tiktok.com" target="_blank" class="contact-item">
+                <span class="contact-icon">💝</span>
                 <span>TikTok</span>
             </a>
-            <a href="https://roblox.com/users/netrochka" target="_blank" class="link-item">
-                <span class="link-icon">🩸</span>
+            <!-- Roblox -->
+            <a href="https://roblox.com" target="_blank" class="contact-item">
+                <span class="contact-icon">🩸</span>
                 <span>Roblox</span>
             </a>
-            <a href="https://youtube.com/@netrochka" target="_blank" class="link-item">
-                <span class="link-icon">📺</span>
+            <!-- YouTube -->
+            <a href="https://youtube.com" target="_blank" class="contact-item">
+                <span class="contact-icon">📺</span>
                 <span>YouTube</span>
             </a>
-            <a href="https://x.com/netrochka" target="_blank" class="link-item">
-                <span class="link-icon">🔮</span>
+            <!-- X (Twitter) -->
+            <a href="https://x.com" target="_blank" class="contact-item">
+                <span class="contact-icon">🔮</span>
                 <span>X (Twitter)</span>
             </a>
-            <a href="https://twitch.tv/netrochka" target="_blank" class="link-item">
-                <span class="link-icon">👾</span>
+            <!-- Twitch -->
+            <a href="https://twitch.tv" target="_blank" class="contact-item">
+                <span class="contact-icon">👾</span>
                 <span>Twitch</span>
             </a>
         </div>
 
+        <!-- Полностью прозрачный приветственный текст для сохранения дизайна -->
+        <p class="welcome-text" style="font-size: 14px; margin-bottom: 15px;">Welcome to my personal page</p>
+
+        <!-- СТРУКТУРА МУЗЫКАЛЬНОГО ПЛЕЕРА -->
         <div class="player-container">
-            <div class="track-info">
-                <img src="cover1.png" alt="Cover" class="track-cover" id="cover">
-                <div class="track-text">
-                    <div class="track-name" id="title">ぎくしゃく</div>
-                    <div class="track-author" id="artist">Yuri Habuka</div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; text-align: left;">
+                <img src="cover1.png" alt="Cover" id="trackCover" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;">
+                <div style="flex: 1; overflow: hidden;">
+                    <div id="trackName" style="font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ぎくしゃく</div>
+                    <div id="trackAuthor" style="font-size: 12px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Yuri Habuka</div>
                 </div>
+                <button id="likeBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 18px;">🤍</button>
             </div>
 
-            <div class="progress-block">
-                <input type="range" class="progress-bar" id="progress" min="0" max="100" value="0">
-                <div class="time-info">
-                    <span id="current-time">0:00</span>
-                    <span id="duration">0:00</span>
-                </div>
+            <!-- Ползунок времени (Progress Bar) -->
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                <span id="currentTime" style="font-size: 11px; color: #aaa; min-width: 28px;">0:00</span>
+                <input type="range" id="progressBar" value="0" min="0" max="100" style="flex: 1; accent-color: #ff1493; cursor: pointer; height: 4px;">
+                <span id="totalTime" style="font-size: 11px; color: #aaa; min-width: 28px;">0:00</span>
             </div>
 
-            <div class="controls">
-                <button class="control-btn" id="like-btn" onclick="toggleLike()">🤍</button>
-                <button class="control-btn" id="prev-btn" onclick="prevTrack()">⏮</button>
-                <button class="control-btn play-btn" id="play-btn" onclick="togglePlay()">▶</button>
-                <button class="control-btn" id="next-btn" onclick="nextTrack()">⏭</button>
-                <button class="control-btn" id="repeat-btn" onclick="toggleRepeat()">🔁</button>
+            <!-- Кнопки управления -->
+            <div style="display: flex; justify-content: center; align-items: center; gap: 20px; font-size: 16px;">
+                <button id="repeatBtn" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 16px;">🔁</button>
+                <button id="prevBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 16px;">⏮</button>
+                <button id="playPauseBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 22px;">▶</button>
+                <button id="nextBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 16px;">⏭</button>
             </div>
         </div>
+
     </div>
 
+    <!-- Скрытый тег аудио для работы плеера -->
+    <audio id="mainAudio" src="track1.mp3"></audio>
     <script>
-        const audio = new Audio();
-        let currentTrackIndex = 0;
-        let isPlaying = false;
-        let isRepeat = false;
-
+        // Строгий массив на 2 композиции, как вы просили
         const tracks = [
             { name: "ぎくしゃく", author: "Yuri Habuka", src: "track1.mp3", cover: "cover1.png" },
             { name: "ねぇ？薬院...", author: "Yuri Habuka", src: "track2.mp3", cover: "cover2.png" }
         ];
 
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        let isRepeat = false;
+
+        // Поиск элементов на странице
+        const audio = document.getElementById('mainAudio');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const repeatBtn = document.getElementById('repeatBtn');
+        const likeBtn = document.getElementById('likeBtn');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
+        const trackCover = document.getElementById('trackCover');
+        const trackName = document.getElementById('trackName');
+        const trackAuthor = document.getElementById('trackAuthor');
+
+        // Функция загрузки информации о треке
         function loadTrack(index) {
             const track = tracks[index];
-            document.getElementById('title').textContent = track.name;
-            document.getElementById('artist').textContent = track.author;
-            
-            const coverImg = document.getElementById('cover');
-            coverImg.src = track.cover;
-            coverImg.onerror = () => coverImg.src = 'https://via.placeholder.com/48';
-            
             audio.src = track.src;
-            document.getElementById('progress').value = 0;
-            document.getElementById('current-time').textContent = "0:00";
+            trackName.textContent = track.name;
+            trackAuthor.textContent = track.author;
+            trackCover.src = track.cover;
+            progressBar.value = 0;
+            currentTimeEl.textContent = "0:00";
         }
 
+        // Управление воспроизведением (Play/Pause)
         function togglePlay() {
-            if (!audio.src) loadTrack(currentTrackIndex);
-            
             if (isPlaying) {
                 audio.pause();
-                document.getElementById('play-btn').textContent = "▶";
+                playPauseBtn.textContent = "▶";
             } else {
-                audio.play().catch(e => console.log("Нажмите на страницу для воспроизведения"));
-                document.getElementById('play-btn').textContent = "⏸";
+                audio.play().catch(e => console.log("Ошибка автовоспроизведения:", e));
+                playPauseBtn.textContent = "⏸";
             }
             isPlaying = !isPlaying;
         }
 
+        // Переключение треков по кругу (Вперед / Назад)
         function nextTrack() {
             currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
             loadTrack(currentTrackIndex);
-            if (isPlaying) audio.play().catch(() => {});
+            if (isPlaying) audio.play();
         }
 
         function prevTrack() {
             currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
             loadTrack(currentTrackIndex);
-            if (isPlaying) audio.play().catch(() => {});
+            if (isPlaying) audio.play();
         }
 
-        function toggleRepeat() {
-            isRepeat = !isRepeat;
-            document.getElementById('repeat-btn').classList.toggle('active', isRepeat);
-        }
-
-        function toggleLike() {
-            const likeBtn = document.getElementById('like-btn');
-            likeBtn.classList.toggle('active');
-            likeBtn.textContent = likeBtn.classList.contains('active') ? "❤️" : "🤍";
-        }
-
-        function toggleSecret(e) {
-            e.stopPropagation();
-            const badge = document.getElementById('secretBadge');
-            badge.style.display = (badge.style.display === 'block') ? 'none' : 'block';
-        }
-
-        audio.addEventListener('timeupdate', () => {
-            if (!audio.duration) return;
-            const progressPercent = (audio.currentTime / audio.duration) * 100;
-            document.getElementById('progress').value = progressPercent;
-            
-            // Format time
-            const curMins = Math.floor(audio.currentTime / 60);
-            const curSecs = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
-            document.getElementById('current-time').textContent = `${curMins}:${curSecs}`;
-            
-            const durMins = Math.floor(audio.duration / 60);
-            const durSecs = Math.floor(audio.duration % 60).toString().padStart(2, '0');
-            document.getElementById('duration').textContent = `${durMins}:${durSecs}`;
-        });
-
-        document.getElementById('progress').addEventListener('input', (e) => {
-            if (!audio.duration) return;
-            const newTime = (e.target.value / 100) * audio.duration;
-            audio.currentTime = newTime;
-        });
-
-        audio.addEventListener('ended', () => {
-            if (isRepeat) {
-                audio.currentTime = 0;
-                audio.play().catch(() => {});
+        // Кнопка Лайк
+        likeBtn.addEventListener('click', () => {
+            if (likeBtn.textContent === "🤍") {
+                likeBtn.textContent = "💖";
+                likeBtn.style.textShadow = "0 0 8px rgba(255, 20, 147, 0.8)";
             } else {
+                likeBtn.textContent = "🤍";
+                likeBtn.style.textShadow = "none";
+            }
+        });
+
+        // Кнопка Повтора (Repeat)
+        repeatBtn.addEventListener('click', () => {
+            isRepeat = !isRepeat;
+            repeatBtn.style.color = isRepeat ? "#ff1493" : "#aaa";
+        });
+
+        // ЛОГИКА АВТОПЕРЕКЛЮЧЕНИЯ ПО ОКОНЧАНИИ ТРЕКА
+        audio.onended = function() {
+            if (isRepeat) {
+                // Если включен репит — зацикливаем текущий трек
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                // Если выключен — переходим строго к следующему по кругу без зависаний
                 nextTrack();
             }
+        };
+
+        // Обновление прогресс-бара и таймеров времени
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = progress;
+                
+                // Считаем минуты и секунды для текущего времени
+                let curMins = Math.floor(audio.currentTime / 60);
+                let curSecs = Math.floor(audio.currentTime % 60);
+                if (curSecs < 10) curSecs = "0" + curSecs;
+                currentTimeEl.textContent = `${curMins}:${curSecs}`;
+
+                // Считаем минуты и секунды для общей длительности
+                let durMins = Math.floor(audio.duration / 60);
+                let durSecs = Math.floor(audio.duration % 60);
+                if (durSecs < 10) durSecs = "0" + durSecs;
+                totalTimeEl.textContent = `${durMins}:${durSecs}`;
+            }
         });
 
-        // Initialize first track data without autoplaying
+        // Интерактивная перемотка ползунком мыши/пальца
+        progressBar.addEventListener('input', () => {
+            if (audio.duration) {
+                audio.currentTime = (progressBar.value / 100) * audio.duration;
+            }
+        });
+
+        // Назначаем события на кнопки управления
+        playPauseBtn.addEventListener('click', togglePlay);
+        nextBtn.addEventListener('click', nextTrack);
+        prevBtn.addEventListener('click', prevTrack);
+
+        // Инициализация при загрузке страницы
         window.addEventListener('DOMContentLoaded', () => {
             loadTrack(currentTrackIndex);
-        });
-
-        document.addEventListener('click', () => {
-            const badge = document.getElementById('secretBadge');
-            if (badge.style.display === 'block') {
-                badge.style.display = 'none';
-            }
         });
     </script>
 </body>
