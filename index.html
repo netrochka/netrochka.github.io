@@ -3,391 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio Page with Music Player</title>
+    <title>netrochka | Premium Profile</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden;
+            display: flex; justify-content: center; align-items: center; background-color: #07030d;
         }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #fff;
-            overflow-x: hidden;
-        }
-
-        /* 1. ИЗМЕНЕНИЯ В ФОНЕ (ВИДЕО) */
+        /* Оптимизированный видео-фон без лагов */
         #bgVideo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            object-fit: cover;
-            filter: blur(25px) brightness(0.6);
+            position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%;
+            width: auto; height: auto; z-index: -1; object-fit: cover;
+            filter: blur(20px) brightness(0.5);
+            pointer-events: none;
         }
 
-        .container {
-            width: 100%;
-            max-width: 450px;
-            padding: 20px;
-            z-index: 1;
-        }
-
+        /* Расширенная карточка (Glassmorphism) */
         .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            position: relative; z-index: 1; background: rgba(18, 9, 31, 0.7);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(212, 61, 251, 0.3); border-radius: 24px;
+            width: 95%; max-width: 580px; padding: 40px 30px; text-align: center;
+            box-shadow: 0 0 30px rgba(212, 61, 251, 0.15);
+            animation: neonPulse 4s ease-in-out infinite alternate;
+        }
+        @keyframes neonPulse { 
+            0% { border-color: rgba(212, 61, 251, 0.3); box-shadow: 0 0 20px rgba(212, 61, 251, 0.1); } 
+            100% { border-color: rgba(212, 61, 251, 0.6); box-shadow: 0 0 35px rgba(212, 61, 251, 0.25); } 
         }
 
-        .avatar-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-            cursor: pointer;
-        }
+        /* Блок аватарки */
+        .avatar-container { position: relative; margin-bottom: 25px; display: inline-block; cursor: pointer; }
+        .avatar { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #d43dfb; object-fit: cover; box-shadow: 0 0 20px rgba(212, 61, 251, 0.5); display: block; transition: transform 0.4s ease; }
+        .avatar-container:hover .avatar { transform: scale(1.06) rotate(2deg); }
 
-        .avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            object-fit: cover;
-        }
-
-        /* 2. РЕДАКЦИЯ ПАСХАЛКИ НА АВАТАРКЕ */
+        /* Всплывающее окно на старой стабильной логике */
         .secret-badge {
-            display: none;
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #000;
-            border: 2px solid #ff007f;
-            border-radius: 12px;
-            padding: 6px 12px;
-            font-size: 14px;
-            text-decoration: none;
-            color: #fff;
-            box-shadow: 0 0 15px #ff007f, inset 0 0 5px #ff007f;
-            text-shadow: 0 0 8px #ff007f;
-            animation: pulse 1.5s infinite;
-            z-index: 10;
+            position: absolute; top: -45px; left: 50%; transform: translateX(-50%) scale(0.8); 
+            background: #ff9900; padding: 6px 16px; border-radius: 8px; 
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.4); opacity: 0; pointer-events: none; 
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10;
+        }
+        .secret-badge::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-width: 5px 5px 0; border-style: solid; border-color: #ff9900 transparent; display: block; width: 0; }
+        .secret-badge.show { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
+        .secret-link { color: #ffffff; text-decoration: none; font-size: 14px; text-shadow: 0 0 8px #fff; display: block; line-height: 1; }
+
+        .username { color: #ffffff; font-size: 32px; font-weight: 900; letter-spacing: 1px; margin-bottom: 30px; text-shadow: 0 0 10px rgba(212, 61, 251, 0.5); }
+        /* Сетка контактов в 2 ряда */
+        .links-wrapper { 
+            position: relative; width: 100%; margin-bottom: 30px; text-align: center;
+        }
+        
+        .contacts-header { 
+            color: #ffffff; font-size: 19px; font-weight: 800; margin-bottom: 25px; 
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px; 
+            text-shadow: 0 0 10px rgba(212, 61, 251, 0.4); opacity: 0.85;
         }
 
-        .avatar-container:hover .secret-badge {
-            display: block;
+        .links-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 14px; position: relative;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 15px #ff007f; }
-            50% { transform: scale(1.05); box-shadow: 0 0 25px #ff007f; }
-            100% { transform: scale(1); box-shadow: 0 0 15px #ff007f; }
+        /* Твоя пунктирная дуга-разделитель прямо по центру колонок */
+        .custom-center-line {
+            position: absolute; left: 50%; top: 5px; bottom: 5px; width: 2px;
+            border-left: 2px dashed rgba(212, 61, 251, 0.4); transform: translateX(-50%);
+            pointer-events: none; z-index: 2;
         }
 
-        .profile-name {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
+        /* Премиум-вкладки в два ряда */
+        .link-item {
+            display: flex; align-items: center; color: #e0d5ed; text-decoration: none; 
+            font-size: 13px; font-weight: 600; padding: 10px 14px; border-radius: 12px; 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(212, 61, 251, 0.08); 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
+        .link-name { font-weight: 700; color: #ffffff; margin-right: 4px; }
+        .link-icon { margin-right: 8px; font-size: 16px; flex-shrink: 0; }
 
-        .profile-bio {
-            font-size: 14px;
-            color: #ddd;
-            margin-bottom: 25px;
+        /* Эффект наведения (левая колонка тянется влево, правая — вправо) */
+        .links-grid a:nth-child(odd):hover { 
+            background: rgba(212, 61, 251, 0.12); border-color: rgba(212, 61, 251, 0.5);
+            transform: translateX(-4px); box-shadow: 0 0 15px rgba(212, 61, 251, 0.15); 
         }
+        .links-grid a:nth-child(even):hover { 
+            background: rgba(212, 61, 251, 0.12); border-color: rgba(212, 61, 251, 0.5);
+            transform: translateX(4px); box-shadow: 0 0 15px rgba(212, 61, 251, 0.15); 
+        }
+        .link-item:hover .link-name { color: #f38eff; }
 
-        /* МУЗЫКАЛЬНЫЙ ПЛЕЕРА */
-        .player {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* ПРОФЕССИОНАЛЬНЫЙ СПОТИФАЙ ПЛЕЕР */
+        .player-container {
+            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 61, 251, 0.15); 
+            border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px;
+            box-shadow: inset 0 0 15px rgba(212, 61, 251, 0.02);
         }
-
-        .track-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .track-cover {
-            width: 55px;
-            height: 55px;
-            border-radius: 8px;
-            object-fit: cover;
-            background: #333;
-        }
-
-        .track-text {
-            flex-grow: 1;
-            overflow: hidden;
-        }
-
-        .track-name {
-            font-size: 16px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .track-artist {
-            font-size: 13px;
-            color: #aaa;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .progress-container {
-            margin-bottom: 15px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            -webkit-appearance: none;
-            appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.2);
-            outline: none;
-            cursor: pointer;
-        }
-
-        .progress-bar::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .progress-bar::-webkit-slider-thumb:hover {
-            transform: scale(1.3);
-        }
-
-        .time-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: #bbb;
-            margin-top: 5px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 10px;
-        }
-
-        .btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 18px;
-            cursor: pointer;
-            opacity: 0.8;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .btn-play {
-            font-size: 28px;
-        }
-
-        .btn.active {
-            color: #ff007f;
-            text-shadow: 0 0 10px #ff007f;
-            opacity: 1;
-        }
+        .track-info { display: flex; align-items: center; gap: 15px; text-align: left; }
+        .track-cover { width: 52px; height: 52px; border-radius: 10px; border: 1px solid rgba(212, 61, 251, 0.3); object-fit: cover; box-shadow: 0 0 10px rgba(212, 61, 251, 0.15); flex-shrink: 0; }
+        .track-text { overflow: hidden; flex-grow: 1; }
+        .track-title { color: #ffffff; font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 8px rgba(212, 61, 251, 0.2); }
+        .track-author { color: #a594b8; font-size: 12px; margin-top: 2px; }
+        
+        /* Таймлайн */
+        .progress-wrapper { display: flex; align-items: center; gap: 10px; width: 100%; }
+        .time-label { color: #a594b8; font-size: 11px; width: 35px; text-align: center; font-variant-numeric: tabular-nums; }
+        .progress-bar-container { position: relative; flex-grow: 1; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; cursor: pointer; }
+        .progress-bar-container:hover .progress-bar { background: #f38eff; }
+        .progress-bar { height: 100%; width: 0%; background: #d43dfb; border-radius: 2px; transition: width 0.1s linear; position: relative; }
+        
+        /* Кнопки плеера */
+        .player-controls { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .control-btn { background: none; border: none; color: #ffffff; font-size: 18px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; }
+        .control-btn:hover { transform: scale(1.15); color: #f38eff; }
+        .btn-play { background: #d43dfb; color: #000000; border-radius: 50%; width: 40px; height: 40px; font-size: 16px; box-shadow: 0 0 10px #d43dfb; }
+        .btn-play:hover { background: #f38eff; box-shadow: 0 0 15px #f38eff; transform: scale(1.08); }
+        .btn-active { color: #f38eff !important; text-shadow: 0 0 10px #d43dfb; }
     </style>
 </head>
 <body>
 
-    <!-- 1. ИЗМЕНЕНИЯ В ФОНЕ (ВИДЕО) -->
+    <!-- Живые обои из твоего Bgrnd.mp4 -->
     <video autoplay muted loop playsinline id="bgVideo">
         <source src="Bgrnd.mp4" type="video/mp4">
     </video>
 
-    <div class="container">
-        <div class="card">
-            <div class="avatar-container">
-                <img src="avatar.png" alt="Avatar" class="avatar">
-                <!-- 2. РЕДАКЦИЯ ПАСХАЛКИ НА АВАТАРКЕ -->
-                <a href="https://pornhub.com" target="_blank" class="secret-badge">💖💖💖</a>
+    <div class="card">
+        <!-- Аватарка + Розовые сердца PH по клику -->
+        <div class="avatar-container" onclick="showSecretBadge()">
+            <div id="secretBadge" class="secret-badge">
+                <a href="https://pornhub.com" target="_blank" class="secret-link">💖💖💖</a>
+            </div>
+            <img src="avatar.png" onerror="this.src='https://imgur.com'" class="avatar" alt="netrochka">
+        </div>
+
+        <div class="username">netrochka</div>
+        <!-- Блок контактов с дугой-разделителем по центру -->
+        <div class="links-wrapper">
+            <div class="contacts-header">💝 Contacts 💝</div>
+            
+            <div class="links-grid">
+                <div class="custom-center-line"></div>
+                
+                <a href="https://steamcommunity.com" target="_blank" class="link-item">
+                    <span class="link-icon">💍</span><span class="link-name">Steam</span>
+                </a>
+                <a href="https://t.me" target="_blank" class="link-item">
+                    <span class="link-icon">⭐</span><span class="link-name">Telegram</span>
+                </a>
+                <a href="https://tiktok.com" target="_blank" class="link-item">
+                    <span class="link-icon">💝</span><span class="link-name">TikTok</span>
+                </a>
+                <a href="https://roblox.com" target="_blank" class="link-item">
+                    <span class="link-icon">🩸</span><span class="link-name">Roblox</span>
+                </a>
+                <a href="https://youtube.com" target="_blank" class="link-item">
+                    <span class="link-icon">📺</span><span class="link-name">YouTube</span>
+                </a>
+                <a href="https://x.com" target="_blank" class="link-item">
+                    <span class="link-icon">🔮</span><span class="link-name">X (Twitter)</span>
+                </a>
+                <a href="https://twitch.tv" target="_blank" class="link-item">
+                    <span class="link-icon">👾</span><span class="link-name">Twitch</span>
+                </a>
+                <a href="https://reddit.com" target="_blank" class="link-item">
+                    <span class="link-icon">👹</span><span class="link-name">Reddit</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Спотифай-плеер с таймлайном и обложкой -->
+        <div class="player-container">
+            <div class="track-info">
+                <img id="trackCover" src="cover1.png" onerror="this.src='https://imgur.com'" class="track-cover" alt="Cover">
+                <div class="track-text">
+                    <div id="trackTitle" class="track-title">ぎкушак</div>
+                    <div class="track-author">Yuri Habuka</div>
+                </div>
+                <button id="likeBtn" class="control-btn" onclick="toggleLike()">🤍</button>
+            </div>
+            
+            <div class="progress-wrapper">
+                <div id="currentTime" class="time-label">0:00</div>
+                <div class="progress-bar-container" id="progressContainer" onclick="setTrackPosition(event)">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+                <div id="totalDuration" class="time-label">0:00</div>
             </div>
 
-            <div class="profile-name">User Profile</div>
-            <div class="profile-bio">Welcome to my personal page</div>
-
-            <!-- 3. МУЗЫКАЛЬНЫЙ ПЛЕЕР -->
-            <div class="player">
-                <div class="track-info">
-                    <img src="" alt="Cover" class="track-cover" id="cover">
-                    <div class="track-text">
-                        <div class="track-name" id="title">Название трека</div>
-                        <div class="track-artist" id="artist">Исполнитель</div>
-                    </div>
-                </div>
-
-                <div class="progress-container">
-                    <input type="range" class="progress-bar" id="progressBar" min="0" max="100" value="0">
-                    <div class="time-info">
-                        <span id="currentTime">0:00</span>
-                        <span id="duration">0:00</span>
-                    </div>
-                </div>
-
-                <div class="controls">
-                    <button class="btn" id="btnLike">❤️</button>
-                    <button class="btn" id="btnPrev">⏮️</button>
-                    <button class="btn btn-play" id="btnPlay">▶️</button>
-                    <button class="btn" id="btnNext">⏭️</button>
-                    <button class="btn" id="btnRepeat">🔁</button>
-                </div>
+            <div class="player-controls">
+                <button id="repeatBtn" class="control-btn" onclick="toggleRepeat()">🔁</button>
+                <button class="control-btn" onclick="prevTrack()">⏮️</button>
+                <button id="playBtn" class="control-btn btn-play" onclick="togglePlay()">▶</button>
+                <button class="control-btn" onclick="nextTrack()">⏭️</button>
             </div>
         </div>
     </div>
-
     <script>
-        // 3. РЕДАКЦИЯ МУЗЫКАЛЬНОГО ПЛЕЕРА (НА 2 ТРЕКА)
+        // Две японские композиции от Yuri Habuka
         const tracks = [
             { name: "ぎくしゃく", author: "Yuri Habuka", src: "track1.mp3", cover: "cover1.png" },
             { name: "ねぇ？薬院...", author: "Yuri Habuka", src: "track2.mp3", cover: "cover2.png" }
         ];
 
-        let currentTrackIndex = 0;
+        let currentTrackIdx = 0;
         let isPlaying = false;
-        let isRepeat = false;
+        let isRepeating = false;
+        let audio = new Audio(tracks[currentTrackIdx].src);
 
-        const audio = new Audio();
-        const playBtn = document.getElementById('btnPlay');
-        const prevBtn = document.getElementById('btnPrev');
-        const nextBtn = document.getElementById('btnNext');
-        const likeBtn = document.getElementById('btnLike');
-        const repeatBtn = document.getElementById('btnRepeat');
-        const progressBar = document.getElementById('progressBar');
-        const currentTimeEl = document.getElementById('currentTime');
-        const durationEl = document.getElementById('duration');
-        const trackCover = document.getElementById('cover');
-        const trackTitle = document.getElementById('title');
-        const trackArtist = document.getElementById('artist');
-
-        function loadTrack(index) {
-            const track = tracks[index];
-            audio.src = track.src;
-            trackTitle.textContent = track.name;
-            trackArtist.textContent = track.author;
-            trackCover.src = track.cover;
-            progressBar.value = 0;
-            currentTimeEl.textContent = "0:00";
-        }
-
-        function playTrack() {
-            isPlaying = true;
-            playBtn.textContent = '⏸️';
-            audio.play().catch(err => console.log("Ошибка воспроизведения:", err));
-        }
-
-        function pauseTrack() {
-            isPlaying = false;
-            playBtn.textContent = '▶️';
-            audio.pause();
-        }
-
-        playBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                pauseTrack();
-            } else {
-                playTrack();
-            }
-        });
-
-        function nextTrack() {
-            currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-            loadTrack(currentTrackIndex);
-            if (isPlaying) playTrack();
-        }
-
-        function prevTrack() {
-            currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
-            loadTrack(currentTrackIndex);
-            if (isPlaying) playTrack();
-        }
-
-        nextBtn.addEventListener('click', nextTrack);
-        prevBtn.addEventListener('click', prevTrack);
-
-        repeatBtn.addEventListener('click', () => {
-            isRepeat = !isRepeat;
-            repeatBtn.classList.toggle('active', isRepeat);
-        });
-
-        likeBtn.addEventListener('click', () => {
-            likeBtn.classList.toggle('active');
-        });
-
-        audio.addEventListener('timeupdate', () => {
-            if (audio.duration) {
-                const progressPercent = (audio.currentTime / audio.duration) * 100;
-                progressBar.value = progressPercent;
-                
-                let currentMins = Math.floor(audio.currentTime / 60);
-                let currentSecs = Math.floor(audio.currentTime % 60);
-                if (currentSecs < 10) currentSecs = `0${currentSecs}`;
-                currentTimeEl.textContent = `${currentMins}:${currentSecs}`;
-
-                let durationMins = Math.floor(audio.duration / 60);
-                let durationSecs = Math.floor(audio.duration % 60);
-                if (durationSecs < 10) durationSecs = `0${durationSecs}`;
-                durationEl.textContent = `${durationMins}:${durationSecs}`;
-            }
-        });
-
-        progressBar.addEventListener('input', () => {
-            if (audio.duration) {
-                const newTime = (progressBar.value / 100) * audio.duration;
-                audio.currentTime = newTime;
-            }
-        });
-
-        // Логика автопереключения без бесконечных циклов
-        audio.addEventListener('ended', () => {
-            if (isRepeat) {
+        // Вешаем слушатели событий ОДИН раз при старте
+        audio.addEventListener('timeupdate', updateProgressBar);
+        audio.addEventListener('loadedmetadata', updateDurationText);
+        
+        // Пофикшенная чистая логика автопереключения без рекурсии
+        audio.onended = function() {
+            if (isRepeating) {
                 audio.currentTime = 0;
-                playTrack();
+                audio.play().catch(e => console.log(e));
             } else {
                 nextTrack();
             }
-        });
+        };
 
-        // Инициализация первого трека при загрузке
-        loadTrack(currentTrackIndex);
+        function updateTrackUI() {
+            document.getElementById('trackTitle').innerText = tracks[currentTrackIdx].name;
+            document.getElementById('trackCover').src = tracks[currentTrackIdx].cover;
+        }
+
+        function togglePlay() {
+            const playBtn = document.getElementById('playBtn');
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerText = "▶";
+            } else {
+                audio.play().catch(e => console.log("Нужен клик на страницу"));
+                playBtn.innerText = "⏸";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function changeTrack(index) {
+            audio.pause();
+            audio.currentTime = 0;
+            currentTrackIdx = index;
+            audio.src = tracks[currentTrackIdx].src;
+            updateTrackUI();
+            if (isPlaying) {
+                audio.play().catch(e => console.log("Ошибка автозапуска"));
+            } else {
+                togglePlay();
+            }
+        }
+
+        function nextTrack() {
+            let idx = (currentTrackIdx + 1) % tracks.length;
+            changeTrack(idx);
+        }
+
+        function prevTrack() {
+            if (audio.currentTime > 3) {
+                audio.currentTime = 0;
+            } else {
+                let idx = currentTrackIdx === 0 ? tracks.length - 1 : currentTrackIdx - 1;
+                changeTrack(idx);
+            }
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function updateProgressBar() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('currentTime').innerText = formatTime(audio.currentTime);
+        }
+
+        function updateDurationText() {
+            document.getElementById('totalDuration').innerText = formatTime(audio.duration);
+        }
+
+        function setTrackPosition(event) {
+            const container = document.getElementById('progressContainer');
+            const totalWidth = container.clientWidth;
+            const clickX = event.offsetX;
+            const duration = audio.duration;
+            if (duration) {
+                audio.currentTime = (clickX / totalWidth) * duration;
+            }
+        }
+
+        function toggleRepeat() {
+            isRepeating = !isRepeating;
+            document.getElementById('repeatBtn').classList.toggle('btn-active', isRepeating);
+        }
+
+        function toggleLike() {
+            const likeBtn = document.getElementById('likeBtn');
+            likeBtn.classList.toggle('btn-active');
+            likeBtn.innerText = likeBtn.classList.contains('btn-active') ? "💖" : "🤍";
+        }
+
+        let badgeTimer;
+        function showSecretBadge() {
+            const badge = document.getElementById('secretBadge');
+            badge.classList.add('show');
+            clearTimeout(badgeTimer);
+            badgeTimer = setTimeout(() => { badge.classList.remove('show'); }, 3000);
+        }
     </script>
 </body>
 </html>
