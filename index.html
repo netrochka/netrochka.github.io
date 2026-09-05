@@ -3,28 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Название вкладки изменено на обычный Profile -->
     <title>netrochka | Profile</title>
-    
     <style>
-        /* Базовые настройки страницы */
+        /* Базовые стили и сброс */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            background-color: #000;
+            background: #000;
         }
 
-        /* ОПТИМИЗИРОВАННЫЙ ФОН (ВИДЕО) */
+        /* Видео-фон */
         #bgVideo {
             position: fixed;
             top: 0;
@@ -33,233 +31,397 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
-            /* Размытие и приглушение яркости */
             filter: blur(25px) brightness(0.6);
-            
-            /* СВЕРХ-ОПТИМИЗАЦИЯ ДЛЯ ВИДЕОКАРТЫ: */
-            /* Говорим браузеру заранее обрабатывать фильтр */
-            will-change: filter;
-            /* Включаем 3D-ускорение, чтобы убрать лаги и жор ресурсов */
-            transform: translate3d(0, 0, 0);
-            -webkit-transform: translate3d(0, 0, 0);
         }
 
-        /* Скрываем текст "Welcome to my personal page" и "Premium" прозрачностью */
-        /* Дизайн не ломается, элементы физически остаются на своих местах */
-        .welcome-text, 
-        .premium-badge-text {
-            opacity: 0 !important;
-            pointer-events: none !important;
-            user-select: none !important;
-        }
-        /* КАРТОЧКА ИНТЕРФЕЙСА (Оригинальная матовая тема Glassmorphism) */
-        .profile-card {
-            background: rgba(255, 255, 255, 0.05);
+        /* Прозрачная матовая карточка (Glassmorphism) */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 30px;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 420px;
+            border-radius: 20px;
+            width: 400px;
             text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             color: #fff;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            z-index: 1;
-            /* Ускоряем рендеринг карточки на фоне видео */
-            transform: translateZ(0);
+            position: relative;
         }
 
+        /* Блок аватарки */
         .avatar-container {
             position: relative;
-            display: inline-block;
-            margin-bottom: 15px;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 15px auto;
+            cursor: pointer;
         }
 
         .avatar {
-            width: 110px;
-            height: 110px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: transform 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            object-fit: cover;
         }
 
-        .avatar:hover {
-            transform: scale(1.05);
-        }
-
-        /* ГОРИЗОНТАЛЬНАЯ ПАСХАЛКА С НЕОНОВЫМ СВЕЧЕНИЕМ */
+        /* Пасхалка на аватарке (Строго ГОРИЗОНТАЛЬНЫЕ сердечки с розовым свечением) */
         .secret-badge {
-            display: flex;
-            flex-direction: row; /* Строго горизонтально в одну линию */
-            justify-content: center;
-            gap: 4px;
-            margin-top: 10px;
-            padding: 6px 12px;
-            background: rgba(255, 20, 147, 0.15);
-            border: 1px solid rgba(255, 20, 147, 0.4);
-            border-radius: 20px;
+            display: none;
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 20, 147, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 105, 180, 0.5);
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 16px;
+            white-space: nowrap;
             text-decoration: none;
-            color: #ff1493;
-            font-weight: bold;
-            font-size: 14px;
-            /* Красивое неоновое свечение */
-            text-shadow: 0 0 8px rgba(255, 20, 147, 0.8), 0 0 15px rgba(255, 20, 147, 0.5);
-            box-shadow: 0 0 10px rgba(255, 20, 147, 0.3), inset 0 0 10px rgba(255, 20, 147, 0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(255, 20, 147, 0.6), inset 0 0 10px rgba(255, 20, 147, 0.4);
+            text-shadow: 0 0 8px #ff1493, 0 0 12px #ff69b4;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
         }
 
         .secret-badge:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 20, 147, 0.6), inset 0 0 15px rgba(255, 20, 147, 0.4);
+            box-shadow: 0 0 25px rgba(255, 20, 147, 0.9);
+            transform: translateX(-50%) scale(1.05);
         }
 
-        /* КОНТАКТЫ (Ссылки) */
-        .contacts-list {
+        .avatar-container:hover .secret-badge {
+            display: block;
+        }
+
+        /* Информация о пользователе */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+        }
+
+        /* Раздел контактов */
+        .contacts-title {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .links-container {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin: 20px 0;
+            margin-bottom: 25px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 4px;
         }
 
-        .contact-item {
+        /* Кастомизация скроллбара для ссылок */
+        .links-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .links-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .link-item {
             display: flex;
             align-items: center;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            color: #eee;
-            text-decoration: none;
-            font-size: 15px;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        .contact-item:hover {
+            justify-content: space-between;
             background: rgba(255, 255, 255, 0.08);
-            transform: translateX(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
-        .contact-icon {
-            margin-right: 12px;
-            font-size: 18px;
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
         }
 
-        /* МУЗЫКАЛЬНЫЙ ПЛЕЕР */
-        .player-container {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .link-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .link-icon {
+            font-size: 16px;
+        }
+
+        /* Музыкальный плеер */
+        .player {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 15px;
-            margin-top: 20px;
+            text-align: left;
         }
 
-        /* Оставшиеся базовые стили плеера закроем в теге </style> ниже */
+        .track-info-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .track-cover {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #222;
+        }
+
+        .track-text {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .track-name {
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .track-author {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Прогресс-бар */
+        .progress-container {
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-wrapper {
+            position: relative;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #fff;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .progress-time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+        }
+
+        /* Кнопки плеера */
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .control-btn:hover {
+            color: #fff;
+        }
+
+        .play-btn {
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+
+        .play-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        /* Активные состояния для Лайка и Репита */
+        .control-btn.like-active {
+            color: #ff1493 !important;
+            filter: drop-shadow(0 0 5px #ff1493);
+        }
+
+        .control-btn.repeat-active {
+            color: #00bfff !important;
+            filter: drop-shadow(0 0 5px #00bfff);
+        }
     </style>
 </head>
 <body>
 
-    <!-- ОПТИМИЗИРОВАННЫЙ ВИДЕО-ФОН -->
+    <!-- Фоновое видео -->
     <video autoplay muted loop playsinline id="bgVideo">
         <source src="Bgrnd.mp4" type="video/mp4">
     </video>
 
-    <!-- ОСНОВНАЯ КАРТОЧКА ПРОФИЛЯ -->
-    <div class="profile-card">
+    <!-- Прозрачная карточка -->
+    <div class="card">
         
-        <!-- Аватарка и горизонтальная пасхалка -->
+        <!-- Аватарка с пасхалкой -->
         <div class="avatar-container">
-            <img src="avatar.png" alt="netrochka" class="avatar" id="avatarImg">
-            <!-- Секретная ссылка на профиль с горизонтальными сердечками -->
-            <a href="https://pornhub.com" target="_blank" class="secret-badge">
-                <span>💖💖💖</span>
-            </a>
+            <!-- Секретные розовые сердечки строго ГОРИЗОНТАЛЬНО -->
+            <a href="https://rt.pornhub.com/users/netrochka" target="_blank" class="secret-badge">💖💖💖</a>
+            <img src="avatar.png" alt="Avatar" class="avatar" onerror="this.src='https://via.placeholder.com/110'">
         </div>
 
-        <!-- Имя пользователя -->
-        <h1 style="font-size: 24px; margin-bottom: 5px; font-weight: 600;">netrochka</h1>
-        
-        <!-- Полностью прозрачный элемент Premium, чтобы сохранить исходную структуру -->
-        <div class="premium-badge-text" style="font-size: 12px; margin-bottom: 15px;">Premium</div>
+        <!-- Профиль -->
+        <h1>netrochka</h1>
+        <div class="subtitle"> <3<3<3 </div>
 
-        <h2 style="font-size: 18px; margin-bottom: 15px; color: #ff1493;">💝 Contacts 💝</h2>
-
-        <!-- СПИСОК КОНТАКТОВ (Дискорд на первом месте, Steam и Reddit удалены) -->
-        <div class="contacts-list">
-            <!-- Discord (на первом месте с черным сердечком) -->
-            <a href="https://discord.com" target="_blank" class="contact-item">
-                <span class="contact-icon">🖤</span>
-                <span>Discord: @netrochka</span>
-            </a>
-            <!-- Telegram -->
-            <a href="https://t.me" target="_blank" class="contact-item">
-                <span class="contact-icon">⭐</span>
-                <span>Telegram</span>
-            </a>
-            <!-- TikTok -->
-            <a href="https://tiktok.com" target="_blank" class="contact-item">
-                <span class="contact-icon">💝</span>
-                <span>TikTok</span>
-            </a>
-            <!-- Roblox -->
-            <a href="https://roblox.com" target="_blank" class="contact-item">
-                <span class="contact-icon">🩸</span>
-                <span>Roblox</span>
-            </a>
-            <!-- YouTube -->
-            <a href="https://youtube.com" target="_blank" class="contact-item">
-                <span class="contact-icon">📺</span>
-                <span>YouTube</span>
-            </a>
-            <!-- X (Twitter) -->
-            <a href="https://x.com" target="_blank" class="contact-item">
-                <span class="contact-icon">🔮</span>
-                <span>X (Twitter)</span>
-            </a>
-            <!-- Twitch -->
-            <a href="https://twitch.tv" target="_blank" class="contact-item">
-                <span class="contact-icon">👾</span>
-                <span>Twitch</span>
-            </a>
-        </div>
-
-        <!-- Полностью прозрачный приветственный текст для сохранения дизайна -->
-        <p class="welcome-text" style="font-size: 14px; margin-bottom: 15px;">Welcome to my personal page</p>
-
-        <!-- СТРУКТУРА МУЗЫКАЛЬНОГО ПЛЕЕРА -->
-        <div class="player-container">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; text-align: left;">
-                <img src="cover1.png" alt="Cover" id="trackCover" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;">
-                <div style="flex: 1; overflow: hidden;">
-                    <div id="trackName" style="font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ぎくしゃく</div>
-                    <div id="trackAuthor" style="font-size: 12px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Yuri Habuka</div>
+        <!-- Контакты -->
+        <div class="contacts-title">💝 Contacts 💝</div>
+        <div class="links-container">
+            <!-- Discord строго на 1-м месте -->
+            <a href="https://discord.com/users/1198058475327070323" target="_blank" class="link-item">
+                <div class="link-left">
+                    <span class="link-icon">🖤</span>
+                    <span>Discord: @netrochka</span>
                 </div>
-                <button id="likeBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 18px;">🤍</button>
+                <span>➔</span>
+            </a>
+            
+            <!-- Остальные соцсети с чистыми английскими именами -->
+            <a href="https://t.me/netrochka" target="_blank" class="link-item">
+                <div class="link-left">
+                    <span class="link-icon">⭐</span>
+                    <span>Telegram</span>
+                </div>
+                <span>➔</span>
+            </a>
+
+            <a href="https://www.tiktok.com/@netrochka" target="_blank" class="link-item">
+                <div class="link-left">
+                    <span class="link-icon">💝</span>
+                    <span>TikTok</span>
+                </div>
+                <span>➔</span>
+            </a>
+
+            <a href="https://www.roblox.com/users/8427859265/profile" target="_blank" class="link-item">
+                <div class="link-left">
+                    <span class="link-icon">🩸</span>
+                    <span>Roblox</span>
+                </div>
+                <span>➔</span>
+            </a>
+
+            <a href="https://www.youtube.com/@netrochka" target="_blank" class="link-item">
+                <div class="link-left">
+                    <span class="link-icon">📺</span>
+                    <span>YouTube</span>
+                </div>
+                <span>➔</span>
+            </a>
+
+            <a href="https://x.com/netrochka" target="_blank" class="link-item">
+                <div class="link-left">
+                    <span class="link-icon">🔮</span>
+                    <span>X (Twitter)</span>
+                </div>
+                <span>➔</span>
+            </a>
+
+            <a href="https://twitch.tv/netrochka" target="_blank" class="link-item">
+                <div class="link-left">
+                    <span class="link-icon">👾</span>
+                    <span>Twitch</span>
+                </div>
+                <span>➔</span>
+            </a>
+        </div>
+
+        <!-- Музыкальный плеер -->
+        <div class="player">
+            <div class="track-info-block">
+                <img src="cover1.png" alt="Cover" class="track-cover" id="trackCover" onerror="this.src='https://via.placeholder.com/48'">
+                <div class="track-text">
+                    <div class="track-name" id="trackName">ぎくしゃく</div>
+                    <div class="track-author" id="trackAuthor">Yuri Habuka</div>
+                </div>
             </div>
 
-            <!-- Ползунок времени (Progress Bar) -->
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-                <span id="currentTime" style="font-size: 11px; color: #aaa; min-width: 28px;">0:00</span>
-                <input type="range" id="progressBar" value="0" min="0" max="100" style="flex: 1; accent-color: #ff1493; cursor: pointer; height: 4px;">
-                <span id="totalTime" style="font-size: 11px; color: #aaa; min-width: 28px;">0:00</span>
+            <!-- Шкала прогресса -->
+            <div class="progress-container">
+                <div class="progress-bar-wrapper" id="progressWrapper">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-time-info">
+                    <span id="currentTime">0:00</span>
+                    <span id="durationTime">0:00</span>
+                </div>
             </div>
 
-            <!-- Кнопки управления -->
-            <div style="display: flex; justify-content: center; align-items: center; gap: 20px; font-size: 16px;">
-                <button id="repeatBtn" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 16px;">🔁</button>
-                <button id="prevBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 16px;">⏮</button>
-                <button id="playPauseBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 22px;">▶</button>
-                <button id="nextBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 16px;">⏭</button>
+            <!-- Кнопки управления плеером -->
+            <div class="player-controls">
+                <!-- Лайк -->
+                <button class="control-btn" id="likeBtn">❤</button>
+                <!-- Назад -->
+                <button class="control-btn" id="prevBtn">⏮</button>
+                <!-- Играть / Пауза -->
+                <button class="control-btn play-btn" id="playBtn">▶</button>
+                <!-- Вперед -->
+                <button class="control-btn" id="nextBtn">⏭</button>
+                <!-- Повтор -->
+                <button class="control-btn" id="repeatBtn">🔁</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Скрытый тег аудио для работы плеера -->
-    <audio id="mainAudio" src="track1.mp3"></audio>
+    <!-- Аудио элемент -->
+    <audio id="audioElement"></audio>
+
     <script>
-        // Строгий массив на 2 композиции, как вы просили
+        // Строго 2 композиции в массиве
         const tracks = [
             { name: "ぎくしゃく", author: "Yuri Habuka", src: "track1.mp3", cover: "cover1.png" },
             { name: "ねぇ？薬院...", author: "Yuri Habuka", src: "track2.mp3", cover: "cover2.png" }
@@ -267,123 +429,121 @@
 
         let currentTrackIndex = 0;
         let isPlaying = false;
-        let isRepeat = false;
+        let isRepeatActive = false;
 
-        // Поиск элементов на странице
-        const audio = document.getElementById('mainAudio');
-        const playPauseBtn = document.getElementById('playPauseBtn');
+        const audio = document.getElementById('audioElement');
+        const playBtn = document.getElementById('playBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const repeatBtn = document.getElementById('repeatBtn');
         const likeBtn = document.getElementById('likeBtn');
-        const progressBar = document.getElementById('progressBar');
-        const currentTimeEl = document.getElementById('currentTime');
-        const totalTimeEl = document.getElementById('totalTime');
+        const repeatBtn = document.getElementById('repeatBtn');
+        
         const trackCover = document.getElementById('trackCover');
         const trackName = document.getElementById('trackName');
         const trackAuthor = document.getElementById('trackAuthor');
+        
+        const progressWrapper = document.getElementById('progressWrapper');
+        const progressFill = document.getElementById('progressFill');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationTimeEl = document.getElementById('durationTime');
 
-        // Функция загрузки информации о треке
+        // Загрузка трека
         function loadTrack(index) {
             const track = tracks[index];
-            audio.src = track.src;
             trackName.textContent = track.name;
             trackAuthor.textContent = track.author;
             trackCover.src = track.cover;
-            progressBar.value = 0;
-            currentTimeEl.textContent = "0:00";
+            audio.src = track.src;
+            progressFill.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+            durationTimeEl.textContent = '0:00';
         }
 
-        // Управление воспроизведением (Play/Pause)
+        // Переключение воспроизведения
         function togglePlay() {
             if (isPlaying) {
                 audio.pause();
-                playPauseBtn.textContent = "▶";
+                playBtn.textContent = '▶';
             } else {
-                audio.play().catch(e => console.log("Ошибка автовоспроизведения:", e));
-                playPauseBtn.textContent = "⏸";
+                audio.play().catch(e => console.log("Ошибка воспроизведения:", e));
+                playBtn.textContent = '❚❚';
             }
             isPlaying = !isPlaying;
         }
 
-        // Переключение треков по кругу (Вперед / Назад)
+        // Следующий трек по кругу
         function nextTrack() {
             currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
             loadTrack(currentTrackIndex);
-            if (isPlaying) audio.play();
+            if (isPlaying) {
+                audio.play().catch(e => console.log(e));
+            }
         }
 
+        // Предыдущий трек по кругу
         function prevTrack() {
             currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
             loadTrack(currentTrackIndex);
-            if (isPlaying) audio.play();
+            if (isPlaying) {
+                audio.play().catch(e => console.log(e));
+            }
         }
 
-        // Кнопка Лайк
-        likeBtn.addEventListener('click', () => {
-            if (likeBtn.textContent === "🤍") {
-                likeBtn.textContent = "💖";
-                likeBtn.style.textShadow = "0 0 8px rgba(255, 20, 147, 0.8)";
-            } else {
-                likeBtn.textContent = "🤍";
-                likeBtn.style.textShadow = "none";
-            }
-        });
+        // Форматирование времени в MM:SS
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
 
-        // Кнопка Повтора (Repeat)
-        repeatBtn.addEventListener('click', () => {
-            isRepeat = !isRepeat;
-            repeatBtn.style.color = isRepeat ? "#ff1493" : "#aaa";
-        });
-
-        // ЛОГИКА АВТОПЕРЕКЛЮЧЕНИЯ ПО ОКОНЧАНИИ ТРЕКА
-        audio.onended = function() {
-            if (isRepeat) {
-                // Если включен репит — зацикливаем текущий трек
-                audio.currentTime = 0;
-                audio.play();
-            } else {
-                // Если выключен — переходим строго к следующему по кругу без зависаний
-                nextTrack();
-            }
-        };
-
-        // Обновление прогресс-бара и таймеров времени
-        audio.addEventListener('timeupdate', () => {
-            if (audio.duration) {
-                const progress = (audio.currentTime / audio.duration) * 100;
-                progressBar.value = progress;
-                
-                // Считаем минуты и секунды для текущего времени
-                let curMins = Math.floor(audio.currentTime / 60);
-                let curSecs = Math.floor(audio.currentTime % 60);
-                if (curSecs < 10) curSecs = "0" + curSecs;
-                currentTimeEl.textContent = `${curMins}:${curSecs}`;
-
-                // Считаем минуты и секунды для общей длительности
-                let durMins = Math.floor(audio.duration / 60);
-                let durSecs = Math.floor(audio.duration % 60);
-                if (durSecs < 10) durSecs = "0" + durSecs;
-                totalTimeEl.textContent = `${durMins}:${durSecs}`;
-            }
-        });
-
-        // Интерактивная перемотка ползунком мыши/пальца
-        progressBar.addEventListener('input', () => {
-            if (audio.duration) {
-                audio.currentTime = (progressBar.value / 100) * audio.duration;
-            }
-        });
-
-        // Назначаем события на кнопки управления
-        playPauseBtn.addEventListener('click', togglePlay);
+        // Слушатели событий управления
+        playBtn.addEventListener('click', togglePlay);
         nextBtn.addEventListener('click', nextTrack);
         prevBtn.addEventListener('click', prevTrack);
 
-        // Инициализация при загрузке страницы
-        window.addEventListener('DOMContentLoaded', () => {
-            loadTrack(currentTrackIndex);
+        // Лайк (переключение класса)
+        likeBtn.addEventListener('click', () => {
+            likeBtn.classList.toggle('like-active');
         });
+
+        // Репит (переключение класса)
+        repeatBtn.addEventListener('click', () => {
+            isRepeatActive = !isRepeatActive;
+            repeatBtn.classList.toggle('repeat-active');
+        });
+
+        // Обновление прогресс-бара и таймеров
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const progressPercent = (audio.currentTime / audio.duration) * 100;
+                progressFill.style.width = `${progressPercent}%`;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+                durationTimeEl.textContent = formatTime(audio.duration);
+            }
+        });
+
+        // Интерактивная перемотка по клику на ползунок
+        progressWrapper.addEventListener('click', (e) => {
+            const width = progressWrapper.clientWidth;
+            const clickX = e.offsetX;
+            if (audio.duration) {
+                audio.currentTime = (clickX / width) * audio.duration;
+            }
+        });
+
+        // Логика автопереключения по окончании трека без зависаний
+        audio.addEventListener('ended', () => {
+            if (isRepeatActive) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log(e));
+            } else {
+                nextTrack();
+            }
+        });
+
+        // Инициализация первого трека при загрузке
+        loadTrack(currentTrackIndex);
     </script>
 </body>
 </html>
