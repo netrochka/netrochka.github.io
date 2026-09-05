@@ -31,14 +31,11 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
-            filter: blur(25px) brightness(0.6);
         }
 
-        /* Прозрачная матовая карточка (Glassmorphism) */
+        /* Прозрачная матовая карточка (Улучшенная оптимизация) */
         .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 30px;
             border-radius: 20px;
@@ -47,15 +44,18 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             color: #fff;
             position: relative;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
-        /* Блок аватарки */
+        /* Блок аватарки с плавной интерактивной анимацией вращения и увеличения */
         .avatar-container {
             position: relative;
             width: 110px;
             height: 110px;
             margin: 0 auto 15px auto;
             cursor: pointer;
+            perspective: 1000px;
         }
 
         .avatar {
@@ -64,17 +64,26 @@
             border-radius: 50%;
             border: 3px solid rgba(255, 255, 255, 0.6);
             object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            will-change: transform;
+        }
+
+        /* CSS Класс при зажатии ЛКМ (mousedown) */
+        .avatar.holding {
+            transform: scale(1.15) rotate(360deg);
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.8);
+            border-color: #ff1493;
         }
 
         /* Пасхалка на аватарке (Строго ГОРИЗОНТАЛЬНЫЕ сердечки с розовым свечением) */
         .secret-badge {
-            display: none;
             position: absolute;
             top: -35px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) scale(0.8);
             background: rgba(255, 20, 147, 0.2);
             backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 105, 180, 0.5);
             padding: 6px 14px;
             border-radius: 15px;
@@ -85,16 +94,23 @@
             box-shadow: 0 0 15px rgba(255, 20, 147, 0.6), inset 0 0 10px rgba(255, 20, 147, 0.4);
             text-shadow: 0 0 8px #ff1493, 0 0 12px #ff69b4;
             letter-spacing: 2px;
-            transition: all 0.3s ease;
+            
+            /* Изначально полностью скрыта */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        }
+
+        /* Класс, который JS будет добавлять для показа кнопки после анимации */
+        .secret-badge.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
         }
 
         .secret-badge:hover {
             box-shadow: 0 0 25px rgba(255, 20, 147, 0.9);
             transform: translateX(-50%) scale(1.05);
-        }
-
-        .avatar-container:hover .secret-badge {
-            display: block;
         }
 
         /* Информация о пользователе */
@@ -298,24 +314,24 @@
 </head>
 <body>
 
-    <!-- Фоновое видео -->
-    <video autoplay muted loop playsinline id="bgVideo">
+    <!-- Фоновое видео (Удален тяжелый CSS-фильтр блюра для оптимизации) -->
+    <video autoplay muted loop playsinline preload="auto" id="bgVideo">
         <source src="Bgrnd.mp4" type="video/mp4">
     </video>
 
     <!-- Прозрачная карточка -->
     <div class="card">
         
-        <!-- Аватарка с пасхалкой -->
-        <div class="avatar-container">
+        <!-- Аватарка с пасхалкой и анимацией клика -->
+        <div class="avatar-container" id="avatarContainer">
             <!-- Секретные розовые сердечки строго ГОРИЗОНТАЛЬНО -->
-            <a href="https://rt.pornhub.com/users/netrochka" target="_blank" class="secret-badge">💖💖💖</a>
-            <img src="avatar.png" alt="Avatar" class="avatar" onerror="this.src='https://via.placeholder.com/110'">
+            <a href="https://rt.pornhub.com/users/netrochka" target="_blank" class="secret-badge" id="secretBadge">💖💖💖</a>
+            <img src="avatar.png" alt="Avatar" class="avatar" id="avatarImg" onerror="this.src='https://via.placeholder.com/110'">
         </div>
 
         <!-- Профиль -->
         <h1>netrochka</h1>
-        <div class="subtitle"> <3<3<3 </div>
+        <div class="subtitle"> &lt;3&lt;3&lt;3 </div>
 
         <!-- Контакты -->
         <div class="contacts-title">💝 Contacts 💝</div>
@@ -329,7 +345,7 @@
                 <span>➔</span>
             </a>
             
-            <!-- Остальные соцсети с чистыми английскими именами -->
+            <!-- Остальные соцсети -->
             <a href="https://t.me/netrochka" target="_blank" class="link-item">
                 <div class="link-left">
                     <span class="link-icon">⭐</span>
@@ -421,7 +437,66 @@
     <audio id="audioElement"></audio>
 
     <script>
-        // Строго 2 композиции в массиве
+        /* ЛОГИКА ВРАЩЕНИЯ ПРИ УДЕРЖАНИИ (MOUSEDOWN / MOUSEUP) */
+        const container = document.getElementById('avatarContainer');
+        const img = document.getElementById('avatarImg');
+        const badge = document.getElementById('secretBadge');
+
+        let isCompleted = false; // Флаг: сделала ли анимация полный круг (0.6с)
+        let animationTimeout = null;
+        let isHolding = false;
+
+        // Когда пользователь зажимает ЛКМ на аватаре
+        container.addEventListener('mousedown', (e) => {
+            if (e.button !== 0) return; // Только левая кнопка мыши
+            isHolding = true;
+            isCompleted = false;
+            
+            // Запускаем вращение
+            img.classList.add('holding');
+
+            // Запускаем таймер на 600мс (время полного оборота в transition)
+            animationTimeout = setTimeout(() => {
+                if (isHolding) {
+                    isCompleted = true; // Анимация успешно завершилась при удержании
+                }
+            }, 600);
+        });
+
+        // Когда пользователь отпускает ЛКМ
+        window.addEventListener('mouseup', () => {
+            if (!isHolding) return;
+            isHolding = false;
+            clearTimeout(animationTimeout);
+
+            // Возвращаем аватар в исходное состояние (обратная анимация через transition)
+            img.classList.remove('holding');
+
+            // Показываем кнопку ТОЛЬКО если аватар успел сделать полный круг до того, как отпустили кнопку
+            if (isCompleted) {
+                badge.classList.add('visible');
+
+                // Кнопка плавно исчезает через 0.5 секунды
+                setTimeout(() => {
+                    badge.classList.remove('visible');
+                }, 500);
+            }
+            isCompleted = false;
+        });
+
+        // Дополнительно обрабатываем уход курсора (чтобы не залипало, если отпустили за пределами)
+        container.addEventListener('mouseleave', () => {
+            // Если нужно, чтобы при уходе курсора анимация сбрасывалась так же, как при mouseup:
+            if (isHolding) {
+                isHolding = false;
+                clearTimeout(animationTimeout);
+                img.classList.remove('holding');
+                isCompleted = false;
+            }
+        });
+
+
+        /* СТРОГО ОРИГИНАЛЬНАЯ ЛОГИКА ПЛЕЕРА */
         const tracks = [
             { name: "ぎくしゃく", author: "Yuri Habuka", src: "track1.mp3", cover: "cover1.png" },
             { name: "ねぇ？薬院...", author: "Yuri Habuka", src: "track2.mp3", cover: "cover2.png" }
@@ -513,13 +588,19 @@
             repeatBtn.classList.toggle('repeat-active');
         });
 
-        // Обновление прогресс-бара и таймеров
+        // Оптимизированное обновление прогресс-бара и таймеров (без лишнего Reflow DOM)
+        let lastSec = -1;
         audio.addEventListener('timeupdate', () => {
             if (audio.duration) {
                 const progressPercent = (audio.currentTime / audio.duration) * 100;
                 progressFill.style.width = `${progressPercent}%`;
-                currentTimeEl.textContent = formatTime(audio.currentTime);
-                durationTimeEl.textContent = formatTime(audio.duration);
+                
+                const currentSec = Math.floor(audio.currentTime);
+                if (currentSec !== lastSec) {
+                    lastSec = currentSec;
+                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                    durationTimeEl.textContent = formatTime(audio.duration);
+                }
             }
         });
 
